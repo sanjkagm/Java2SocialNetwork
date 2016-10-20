@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <h1>Hello from JSP file! (PAVEL-BRANCH)</h1>
+    <h1>Hello from JSP file!</h1>
 
 </body>
 </html>
