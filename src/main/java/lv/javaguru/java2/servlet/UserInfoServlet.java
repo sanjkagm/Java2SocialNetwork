@@ -12,33 +12,39 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
-@WebServlet(urlPatterns = { "/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/userInfo" })
+public class UserInfoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public LoginServlet() {
+    public UserInfoServlet() {
         super();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-
         HttpSession session = request.getSession();
 
-        UserDAOImpl userDAOObj = new UserDAOImpl();
-        User userInSession = userDAOObj.getLoginedUser(session);
 
-        if (userInSession != null) {
-            response.sendRedirect("/userInfo");
+        // Check User has logged on
+        UserDAOImpl userDAOObj = new UserDAOImpl();
+        User loginedUser = userDAOObj.getLoginedUser(session);
+
+
+        // Not logged in
+        if (loginedUser == null) {
+
+            // Redirect to login page.
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
+        // Store info in request attribute
+        request.setAttribute("user", loginedUser);
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/loginView.jsp");
 
+        // Logined, forward to /WEB-INF/userInfoView.jsp
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/userInfoView.jsp");
         dispatcher.forward(request, response);
 
     }

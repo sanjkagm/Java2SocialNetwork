@@ -1,9 +1,8 @@
 package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
-import lv.javaguru.java2.domain.User;
 
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,12 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
-@WebServlet(urlPatterns = { "/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/logout"})
+public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public LoginServlet() {
+    public LogoutServlet() {
         super();
     }
 
@@ -26,20 +24,15 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
 
-        HttpSession session = request.getSession();
-
-        UserDAOImpl userDAOObj = new UserDAOImpl();
-        User userInSession = userDAOObj.getLoginedUser(session);
-
-        if (userInSession != null) {
-            response.sendRedirect("/userInfo");
-            return;
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+            //Delete user cookie
+            UserDAOImpl userDAOObj = new UserDAOImpl();
+            userDAOObj.deleteUserCookie(response);
         }
-
-
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/loginView.jsp");
-
-        dispatcher.forward(request, response);
+        //request.getRequestDispatcher("/login").forward(request,response);
+        response.sendRedirect("/");
 
     }
 
@@ -50,3 +43,4 @@ public class LoginServlet extends HttpServlet {
     }
 
 }
+

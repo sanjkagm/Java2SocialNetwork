@@ -67,7 +67,72 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
         }
     }
 
-    public List<User> getAll() throws DBException {
+    public User getByUsernameAndPassword(String username, String password) throws DBException {
+        Connection connection = null;
+
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select * from USERS where username = ? AND password = ?");
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            User user = null;
+            if (resultSet.next()) {
+                user = new User();
+                user.setUserId(resultSet.getLong("UserID"));
+                user.setFirstName(resultSet.getString("FirstName"));
+                user.setLastName(resultSet.getString("LastName"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+
+                user.setCountry(resultSet.getString("country"));
+                user.setCity(resultSet.getString("city"));
+            }
+            return user;
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserDAOImpl.getByUsernameAndPassword()");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+    public User getByUsername(String username) throws DBException {
+        Connection connection = null;
+
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select * from USERS where username = ?");
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            User user = null;
+            if (resultSet.next()) {
+                user = new User();
+                user.setUserId(resultSet.getLong("UserID"));
+                user.setFirstName(resultSet.getString("FirstName"));
+                user.setLastName(resultSet.getString("LastName"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                user.setCountry(resultSet.getString("country"));
+                user.setCity(resultSet.getString("city"));
+            }
+            return user;
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserDAOImpl.getByUsername");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+
+
+        public List<User> getAll() throws DBException {
         List<User> users = new ArrayList<User>();
         Connection connection = null;
         try {

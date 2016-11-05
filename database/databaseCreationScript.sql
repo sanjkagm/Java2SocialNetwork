@@ -35,3 +35,9 @@ ALTER TABLE `users` ADD `date_of_birth` DATE NOT NULL ,
                     ADD `age_from` SMALLINT NOT NULL ,
                     ADD `age_to` SMALLINT NOT NULL ,
                     ADD `about` TEXT NOT NULL ;
+
+
+INSERT INTO `java2app`.`users`
+  (`usename`, `password`, `UserID`, `FirstName`, `LastName`, `date_of_birth`, `city`, `country`, `sex`, `looking_for`, `age_from`, `age_to`, `about`)
+  VALUES
+  ('user1', 'user1pass', NULL, 'User1FirstName', 'User1LastName', '1998-10-04', 'Riga', 'Latvia', 'M', 'F', '18', '30', 'Very cool about text!');

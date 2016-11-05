@@ -2,8 +2,6 @@ package lv.javaguru.java2.servlet;
 
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,6 +33,8 @@ public class DoLoginServlet extends HttpServlet {
 
 
         User user = null;
+        UserDAOImpl userDAOObj = new UserDAOImpl();
+
         boolean hasError = false;
         String errorString = null;
 
@@ -45,8 +45,8 @@ public class DoLoginServlet extends HttpServlet {
         } else {
 
             try {
-                UserDAOImpl userDAOObj = new UserDAOImpl();
-                user = userDAOObj.getById(1L);
+
+                user = userDAOObj.getByUsernameAndPassword(username, password);
 
                 if (user == null) {
                     hasError = true;
@@ -59,7 +59,7 @@ public class DoLoginServlet extends HttpServlet {
             }
         }
 
-        // If error, forward to /WEB-INF/views/login.jsp
+        // If error, forward to /WEB-INF/loginView.jsp
         if (hasError) {
             user = new User();
             user.setUsername(username);
@@ -71,7 +71,7 @@ public class DoLoginServlet extends HttpServlet {
             request.setAttribute("user", user);
 
 
-            // Forward to /WEB-INF/login.jsp
+            // Forward to /WEB-INF/loginView.jsp
             RequestDispatcher dispatcher //
                     = this.getServletContext().getRequestDispatcher("/loginView.jsp");
 
@@ -82,17 +82,17 @@ public class DoLoginServlet extends HttpServlet {
         // Store user information in Session
         // And redirect to userInfo page.
         else {
-            /*HttpSession session = request.getSession();
-            MyUtils.storeLoginedUser(session, user);
+            HttpSession session = request.getSession();
+            userDAOObj.storeLoginedUser(session, user);
 
-            // If user checked "Remember me".
-            if(remember)  {
-                MyUtils.storeUserCookie(response,user);
-            }
+
+           //if(remember)  {
+                userDAOObj.storeUserCookie(response,user);
+            //}
 
             // Else delete cookie.
-            else  {
-                MyUtils.deleteUserCookie(response);
+            /*else  {
+               userDAOObj.deleteUserCookie(response);
             }*/
 
             // Redirect to userInfo page.

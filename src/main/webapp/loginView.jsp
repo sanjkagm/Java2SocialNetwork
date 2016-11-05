@@ -47,12 +47,7 @@
         <div class="clearfix colelem" id="pu1434-4"><!-- group -->
             <a class="nonblock nontext transition clearfix grpelem" id="u1434-4" onclick="loginForm.submit()" style="cursor: pointer"><!-- content --><p>Login</p></a>
             <a class="nonblock nontext transition clearfix grpelem" id="u1437-4" href="registration-page.html"><!-- content --><p>Register</p></a>
-
         </div>
-        <div class="clearfix colelem" id="pu1434-4"><!-- group -->
-            <a style="left:30%" class="nonblock nontext transition clearfix grpelem" id="u1434-4" href="${pageContext.request.contextPath}"><!-- content --><p>Cancel</p></a>
-        </div>
-
         <div class="clearfix colelem" id="u1618-4"><!-- content -->
             <p>${errorString}</p>
         </div>

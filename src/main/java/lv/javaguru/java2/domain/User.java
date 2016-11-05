@@ -7,6 +7,8 @@ public class User {
     private String lastName;
     private String username;
     private String password;
+    private String country;
+    private String city;
 
 
     public Long getUserId() {
@@ -47,5 +49,18 @@ public class User {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
     }
 }
