@@ -22,3 +22,16 @@ AUTO_INCREMENT = 1002;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+
+ALTER TABLE `users` ADD `usename` VARCHAR(255) NOT NULL FIRST, ADD `password` VARCHAR(255) NOT NULL AFTER `usename`;
+ALTER TABLE `users` ADD `date_of_birth` DATE NOT NULL ,
+                    ADD `city` VARCHAR(255) NOT NULL ,
+                    ADD `country` VARCHAR(255) NOT NULL ,
+                    ADD `sex` SET('M','F') NOT NULL DEFAULT 'M' ,
+                    ADD `looking_for` SET('M','F') NOT NULL DEFAULT 'F' ,
+                    ADD `age_from` SMALLINT NOT NULL ,
+                    ADD `age_to` SMALLINT NOT NULL ,
+                    ADD `about` TEXT NOT NULL ;
