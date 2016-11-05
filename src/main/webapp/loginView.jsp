@@ -36,7 +36,7 @@
             <div class="clearfix grpelem" id="u1440-4"><!-- content -->
                 <p>Username:</p>
             </div>
-            <div class="grpelem" id="u1441"><input type="text" name="userName" value= "${user.userName}" /></div>
+            <div class="grpelem" id="u1441"><input type="text" name="username" value= "${user.username}" /></div>
         </div>
         <div class="clearfix colelem" id="pu1446-4"><!-- group -->
             <div class="clearfix grpelem" id="u1446-4"><!-- content -->

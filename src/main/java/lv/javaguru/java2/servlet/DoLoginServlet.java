@@ -28,31 +28,31 @@ public class DoLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String userName = request.getParameter("userName");
+        String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String rememberMeStr = request.getParameter("rememberMe");
-        boolean remember= "Y".equals(rememberMeStr);
+        //String rememberMeStr = request.getParameter("rememberMe");
+        //boolean remember= "Y".equals(rememberMeStr);
 
 
         User user = null;
         boolean hasError = false;
         String errorString = null;
 
-        if (userName == null || password == null
-                || userName.length() == 0 || password.length() == 0) {
+        if (username == null || password == null
+                || username.length() == 0 || password.length() == 0) {
             hasError = true;
             errorString = "Required username and password!";
         } else {
 
             try {
-                User user1 = new UserDAOImpl();
-                user = user.get
+                UserDAOImpl userDAOObj = new UserDAOImpl();
+                user = userDAOObj.getById(1L);
 
                 if (user == null) {
                     hasError = true;
                     errorString = "User Name or password invalid";
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 hasError = true;
                 errorString = e.getMessage();
@@ -61,8 +61,8 @@ public class DoLoginServlet extends HttpServlet {
 
         // If error, forward to /WEB-INF/views/login.jsp
         if (hasError) {
-            user = new UserAccount();
-            user.setUserName(userName);
+            user = new User();
+            user.setUsername(username);
             user.setPassword(password);
 
 
@@ -71,9 +71,9 @@ public class DoLoginServlet extends HttpServlet {
             request.setAttribute("user", user);
 
 
-            // Forward to /WEB-INF/views/login.jsp
+            // Forward to /WEB-INF/login.jsp
             RequestDispatcher dispatcher //
-                    = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
+                    = this.getServletContext().getRequestDispatcher("/loginView.jsp");
 
             dispatcher.forward(request, response);
         }
@@ -82,7 +82,7 @@ public class DoLoginServlet extends HttpServlet {
         // Store user information in Session
         // And redirect to userInfo page.
         else {
-            HttpSession session = request.getSession();
+            /*HttpSession session = request.getSession();
             MyUtils.storeLoginedUser(session, user);
 
             // If user checked "Remember me".
@@ -93,7 +93,7 @@ public class DoLoginServlet extends HttpServlet {
             // Else delete cookie.
             else  {
                 MyUtils.deleteUserCookie(response);
-            }
+            }*/
 
             // Redirect to userInfo page.
             response.sendRedirect(request.getContextPath() + "/userInfo");
