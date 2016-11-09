@@ -28,7 +28,7 @@ public class UserInfoServlet extends HttpServlet {
 
         // Check User has logged on
         UserDAOImpl userDAOObj = new UserDAOImpl();
-        User loginedUser = userDAOObj.getLoginedUser(session);
+        User loginedUser = User.getLoginedUser(session);
 
 
         // Not logged in

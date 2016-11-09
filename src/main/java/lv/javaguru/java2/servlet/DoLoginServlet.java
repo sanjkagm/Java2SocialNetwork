@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 
@@ -26,6 +27,9 @@ public class DoLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+
+
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         //String rememberMeStr = request.getParameter("rememberMe");
@@ -33,7 +37,7 @@ public class DoLoginServlet extends HttpServlet {
 
 
         User user = null;
-        UserDAOImpl userDAOObj = new UserDAOImpl();
+        UserDAO userDAOObj = new UserDAOImpl();
 
         boolean hasError = false;
         String errorString = null;
@@ -59,7 +63,7 @@ public class DoLoginServlet extends HttpServlet {
             }
         }
 
-        // If error, forward to /WEB-INF/loginView.jsp
+        // If error, forward to /loginView.jsp
         if (hasError) {
             user = new User();
             user.setUsername(username);
@@ -71,7 +75,7 @@ public class DoLoginServlet extends HttpServlet {
             request.setAttribute("user", user);
 
 
-            // Forward to /WEB-INF/loginView.jsp
+            // Forward to /loginView.jsp
             RequestDispatcher dispatcher //
                     = this.getServletContext().getRequestDispatcher("/loginView.jsp");
 
@@ -83,11 +87,11 @@ public class DoLoginServlet extends HttpServlet {
         // And redirect to userInfo page.
         else {
             HttpSession session = request.getSession();
-            userDAOObj.storeLoginedUser(session, user);
+            user.storeLoginedUser(session, user);
 
 
            //if(remember)  {
-                userDAOObj.storeUserCookie(response,user);
+                user.storeUserCookie(response,user);
             //}
 
             // Else delete cookie.

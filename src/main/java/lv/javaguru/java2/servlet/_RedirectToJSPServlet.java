@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class RedirectToJSPServlet extends HttpServlet {
+public class _RedirectToJSPServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
         // Prepare output html
         ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/helloWorld.jsp");
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/_helloWorld.jsp");
         requestDispatcher.forward(request, response);
     }
 

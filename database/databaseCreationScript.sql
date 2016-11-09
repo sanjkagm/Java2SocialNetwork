@@ -26,7 +26,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 
-ALTER TABLE `users` ADD `usename` VARCHAR(255) NOT NULL FIRST, ADD `password` VARCHAR(255) NOT NULL AFTER `usename`;
+ALTER TABLE `users` ADD `username` VARCHAR(255) NOT NULL FIRST, ADD `password` VARCHAR(255) NOT NULL AFTER `usename`;
 ALTER TABLE `users` ADD `date_of_birth` DATE NOT NULL ,
                     ADD `city` VARCHAR(255) NOT NULL ,
                     ADD `country` VARCHAR(255) NOT NULL ,
@@ -38,6 +38,10 @@ ALTER TABLE `users` ADD `date_of_birth` DATE NOT NULL ,
 
 
 INSERT INTO `java2app`.`users`
-  (`usename`, `password`, `UserID`, `FirstName`, `LastName`, `date_of_birth`, `city`, `country`, `sex`, `looking_for`, `age_from`, `age_to`, `about`)
+  (`username`, `password`, `UserID`, `FirstName`, `LastName`, `date_of_birth`, `city`, `country`, `sex`, `looking_for`, `age_from`, `age_to`, `about`)
   VALUES
   ('user1', 'user1pass', NULL, 'User1FirstName', 'User1LastName', '1998-10-04', 'Riga', 'Latvia', 'M', 'F', '18', '30', 'Very cool about text!');
+
+
+ALTER TABLE `users` CHANGE `UserID` `UserID` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `FirstName` `FirstName` CHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `LastName` `LastName` CHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `date_of_birth` `date_of_birth` DATE NULL, CHANGE `city` `city` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `country` `country` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `sex` `sex` SET('M','F') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'M', CHANGE `looking_for` `looking_for` SET('M','F') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'F', CHANGE `age_from` `age_from` SMALLINT(6) NULL, CHANGE `age_to` `age_to` SMALLINT(6) NULL, CHANGE `about` `about` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ALTER TABLE `users` ADD UNIQUE( `username`);

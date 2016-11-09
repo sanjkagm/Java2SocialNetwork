@@ -17,7 +17,7 @@
 
     <servlet>
         <servlet-name>HelloWorldServlet</servlet-name>
-        <servlet-class>lv.javaguru.java2.servlet.HelloWorldServlet</servlet-class>
+        <servlet-class>lv.javaguru.java2.servlet._HelloWorldServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -27,7 +27,7 @@
 
     <servlet>
         <servlet-name>ParameterProcessingServlet</servlet-name>
-        <servlet-class>lv.javaguru.java2.servlet.ParameterProcessingServlet</servlet-class>
+        <servlet-class>lv.javaguru.java2.servlet._ParameterProcessingServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -37,7 +37,7 @@
 
     <servlet>
         <servlet-name>SessionUsageServlet</servlet-name>
-        <servlet-class>lv.javaguru.java2.servlet.SessionUsageServlet</servlet-class>
+        <servlet-class>lv.javaguru.java2.servlet._SessionUsageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -47,7 +47,7 @@
 
     <servlet>
         <servlet-name>RedirectToJSPServlet</servlet-name>
-        <servlet-class>lv.javaguru.java2.servlet.RedirectToJSPServlet</servlet-class>
+        <servlet-class>lv.javaguru.java2.servlet._RedirectToJSPServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

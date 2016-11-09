@@ -1,24 +1,21 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.UserDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
-import lv.javaguru.java2.domain.User;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
-@WebServlet(urlPatterns = { "/login"})
-public class LoginServlet extends HttpServlet {
+/**
+ * Created by Pavel on 06.11.2016..
+ */
+@WebServlet(urlPatterns = { "/addUser" })
+public class AddUserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public LoginServlet() {
+    public AddUserServlet() {
         super();
     }
 
@@ -26,20 +23,8 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
-        HttpSession session = request.getSession();
-
-        User user = new User();
-        User userInSession = user.getLoginedUser(session);
-
-        if (userInSession != null) {
-            response.sendRedirect("/userInfo");
-            return;
-        }
-
-
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/loginView.jsp");
-
+        RequestDispatcher dispatcher = request.getServletContext()
+                .getRequestDispatcher("/addUserView.jsp");
         dispatcher.forward(request, response);
 
     }
