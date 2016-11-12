@@ -30,11 +30,12 @@
             </div>
         </div>
     </div>
-    <div class="clearfix grpelem" id="u110"><!-- group -->
-        <div class="clearfix grpelem" id="u1146-6"><!-- content -->
-            <p>My</p>
-            <p>Photo</p>
+    <div class="clearfix grpelem" id="u110" style="left:0; background-color: transparent"><!-- group -->
+
+        <div class="clearfix grpelem" id="u1086-6" style="left:-40%;margin-top:0; ">
+            <img src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="max-width: 215px;">
         </div>
-        <a class="nonblock nontext clearfix grpelem" id="u1149" href="my-page.html"><!-- group --><div class="grpelem" id="u1621"><!-- content --><div class="fluid_height_spacer"></div></div></a>
+        <div class="clearfix grpelem" id="u1146-6"><div class="fluid_height_spacer"></div></div>
+
     </div>
 </div>

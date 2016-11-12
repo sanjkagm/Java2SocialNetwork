@@ -64,12 +64,17 @@
                 </div>
             </div>
         </div>
-        <div class="clearfix grpelem" id="u110"><!-- group -->
-            <div class="clearfix grpelem" id="u1086-6"><!-- content -->
-                <p>My</p>
-                <p>Photo</p>
+        <div class="clearfix grpelem" id="u110" style="background-color: transparent"><!-- group -->
+            <form name="uploadForm" id="uploadForm" method="POST" action="doEditUser" enctype="multipart/form-data">
+                <input type="hidden" name="uploadForm" value="true">
+                <input type="file" id="avatar" name="avatar" style="display:none;"/>
+                <!--<input type="submit" value="upload" />-->
+            </form>
+
+            <div class="clearfix grpelem" id="u1086-6" style="left:-40%;margin-top:0; ">
+                    <img src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer; max-width: 215px;" onclick="document.getElementById('avatar').click(); return false">
             </div>
-            <div class="grpelem" id="u1735"><!-- content -->
+            <div class="grpelem" id="u1735" style="pointer-events: none;"><!-- content -->
                 <div class="fluid_height_spacer"></div>
             </div>
         </div>
@@ -80,7 +85,7 @@
     <form name="editform" method="POST" action="doEditUser">
     <div class="rgba-background clearfix colelem" id="u1344"><!-- column -->
         <div class="clearfix colelem" id="u1766-4"><!-- content -->
-            <p>${errorString}<span style="color: #3eff13">${successString}</span></p>
+            <p><span id="error">${errorString}</span><span id="success" style="color: #3eff13">${successString}</span></p>
         </div>
         <input type="hidden" name="username" value="${user.username}" />
         <input type="hidden" name="UserID" value="${user.userId}" />
@@ -183,7 +188,70 @@
             $("#age_from").val("")
         if ($("#age_to").val() == 0 )
             $("#age_to").val("")
+
+        $(function () {
+            $(":file").change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+
+                    var file = this.files[0];
+                    var fileType = file["type"];
+                    var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                    if ($.inArray(fileType, ValidImageTypes) < 0) {
+                        // invalid file type code goes here.
+                    } else {
+                        reader.onload = imageIsLoaded;
+                        reader.readAsDataURL(this.files[0]);
+                    }
+
+                }
+            });
+        });
+
+        function imageIsLoaded(e) {
+            $('#avatarImg').attr('src', e.target.result);
+        };
+
+
+        $('#avatar').on('change', function() {
+            var file_data = $('#avatar').prop('files')[0];
+            var form_data = new FormData();
+            form_data.append('file', file_data);
+            //alert(form_data);
+            $.ajax({
+                url: '/upload', // point to server-side PHP script
+                dataType: 'text',  // what to expect back from the PHP script, if anything
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+                type: 'post',
+                success: function(php_script_response){
+                    if (php_script_response == 1) {
+                        $('#error').text('');
+                        $('#success').text('File Uploaded Successfully');
+                    }
+                    else if (php_script_response == 2) {
+                        $('#success').text('');
+                        $('#error').text('Selected file is not an image!');
+                    }
+                    else {
+                        $('#success').text('');
+                        $('#error').text(php_script_response);
+                    }
+
+                     // display response from the PHP script, if any
+                }
+            });
+        });
+
+
     });
+
+
+
+
+
 </script>
 </body>
 </html>
