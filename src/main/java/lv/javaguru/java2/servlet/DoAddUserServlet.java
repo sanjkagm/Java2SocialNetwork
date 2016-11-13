@@ -104,7 +104,7 @@ public class DoAddUserServlet extends HttpServlet {
             } catch (DBException e) {
                 e.printStackTrace();
                 if ( e.getMessage().toLowerCase().contains("duplicate entry") ) {
-                    errorString = "Record already exists!";
+                    errorString = "User already exists!";
                 }
                 else
                     errorString = e.getMessage();
@@ -127,7 +127,8 @@ public class DoAddUserServlet extends HttpServlet {
         // If everything nice.
         // Redirect to login page or display success message.
         else {
-            successString = "User successfully created!<br> Now you can <a href='" + request.getContextPath() + "/login'>Login</a>";
+            //successString = "User successfully created!<br> Now you can <a href='" + request.getContextPath() + "/login'>Login</a>";
+            successString = "User successfully created! Now you can Login";
             request.setAttribute("successString", successString);
 
 

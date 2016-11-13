@@ -166,7 +166,7 @@ public class DoEditUserServlet extends HttpServlet {
         }
 
         // If everything nice.
-        // Redirect to the product listing page.
+        // Redirect.
         else {
             if (isEmpty(passwordForm)) {
                 request.setAttribute("user", user);

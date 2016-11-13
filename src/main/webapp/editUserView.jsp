@@ -1,185 +1,142 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Pavel
+  Date: 13.11.2016.
+  Time: 19:20
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html class="nojs html css_verticalspacer" lang="en-US">
+<!doctype html>
+<html class="no-js" lang="en">
 <head>
-
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
-    <meta name="generator" content="2015.2.1.352"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-
-
-    <title>my-page</title>
-    <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="media/css/site_global.css?crc=338158355"/>
-    <link rel="stylesheet" type="text/css" href="media/css/master_a-master.css?crc=3867736355"/>
-    <link rel="stylesheet" type="text/css" href="media/css/my-page.css?crc=3948355035" id="pagesheet"/>
-    <!-- IE-only CSS -->
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" type="text/css" href="media/css/iefonts_my-page.css?crc=4138974196"/>
-    <![endif]-->
-    <!-- Other scripts -->
-    <script type="text/javascript">
-        var __adobewebfontsappname__ = "muse";
-    </script>
-    <!-- JS includes -->
-    <script type="text/javascript">
-        document.write('\x3Cscript src="' + (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//webfonts.creativecloud.com/dosis:n3,n4:default.js" type="text/javascript">\x3C/script>');
-    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JAVA2 | Edit info</title>
+    <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="clearfix borderbox" id="page"><!-- column -->
-    <div class="clearfix colelem" id="pu104"><!-- group -->
-        <div class="browser_width grpelem" id="u104-bw">
-            <div class="gradient" id="u104"><!-- column -->
-                <div class="clearfix" id="u104_align_to_page">
-                    <div class="clearfix colelem" id="pu1797-4"><!-- group -->
-                        <div class="clearfix grpelem" id="u1797-4"><!-- content -->
-                            <p><a href="${pageContext.request.contextPath}/editUser">${user.firstName} ${user.lastName}, Age</a></p>
-                        </div>
-                        <a class="nonblock nontext gradient rounded-corners clearfix grpelem" id="u971" href="${pageContext.request.contextPath}/logout"><!-- group --><div class="clearfix grpelem" id="u974-4"><!-- content --><p>LogOut</p></div></a>
-                        <img class="grpelem" id="u972" alt="" width="30" height="30" src="media/images/48-u972.png?crc=4006277573"/><!-- rasterized frame -->
-                    </div>
-                    <div class="clearfix colelem" id="u1799-4"><!-- content -->
-                        <p>${user.country}, ${user.city}</p>
-                    </div>
-                    <div class="clearfix colelem" id="u1798-4"><!-- content -->
-                        <p>Online</p>
-                    </div>
+<div class="off-canvas-wrapper" style="height:100% !important">
+    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper style="height:100%">
+
+        <div style="width: 246px; z-index:0" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
+            <div class="row column">
+                <br>
+                <form name="uploadForm" id="uploadForm" method="POST" action="doEditUser" enctype="multipart/form-data">
+                    <input type="hidden" name="uploadForm" value="true">
+                    <input type="file" id="avatar" name="avatar" style="display:none;"/>
+                    <!--<input type="submit" value="upload" />-->
+                </form>
+                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer; max-width: 215px;" onclick="document.getElementById('avatar').click(); return false">
+                <h5><a href="${pageContext.request.contextPath}/editUser">${user.firstName} ${user.lastName}</a></h5>
+                <h6 style="font-size: 0.9rem">${user.country}, ${user.city}</h6>
+                <p>${user.about}</p>
+            </div>
+        </div>
+
+        <div class="off-canvas-content" data-off-canvas-content>
+            <div class="title-bar hide-for-large">
+                <div class="title-bar-left">
+                    <button class="menu-icon" type="button" data-open="my-info"></button>
+                    <span class="title-bar-title"><a href="${pageContext.request.contextPath}/editUser">${user.firstName} ${user.lastName}</a></span>
                 </div>
             </div>
-        </div>
-        <div class="browser_width grpelem" id="u107-bw">
-            <div class="gradient" id="u107"><!-- group -->
-                <div class="clearfix" id="u107_align_to_page">
-                    <a class="nonblock nontext transition clearfix grpelem" id="u989-4" href="friends-page.html"><!-- content --><p>Friends</p></a>
-                    <div class="transition clearfix grpelem" id="u1001-4"><!-- content -->
-                        <p>Massages</p>
-                    </div>
-                    <div class="clearfix grpelem" id="pu966-4"><!-- group -->
-                        <a class="nonblock nontext transition clearfix grpelem" id="u966-4" href="${pageContext.request.contextPath}/"><!-- content --><p>Main</p></a>
-                        <a class="nonblock nontext transition clearfix grpelem" id="u1089-4" href="search-page.html"><!-- content --><p>Search</p></a>
-                    </div>
+            <div class="callout primary">
+                <div style="position: absolute; right: 20px;top:20px;"><a href="${pageContext.request.contextPath}/logout"><strong><i class="fa fa-sign-out" aria-hidden="true"></i>
+                    Logout</strong></a></div>
+                <div class="row column">
+                    <h1>JAVA2 Social Network</h1>
+                    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis. In condimentum facilisis porta.</p>
                 </div>
             </div>
-        </div>
-        <div class="clearfix grpelem" id="u110" style="background-color: transparent"><!-- group -->
-            <form name="uploadForm" id="uploadForm" method="POST" action="doEditUser" enctype="multipart/form-data">
-                <input type="hidden" name="uploadForm" value="true">
-                <input type="file" id="avatar" name="avatar" style="display:none;"/>
-                <!--<input type="submit" value="upload" />-->
-            </form>
+            <div class="row column" style="margin-top: -1em; max-width:100%;">
+                <ul class="menu">
+                    <li><a href="#">Friends</a></li>
+                    <li><a href="#">Messages</a></li>
+                    <li><a href="${pageContext.request.contextPath}/">Main</a></li>
+                    <li><a href="#">Search</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                <form name="editform" method="POST" action="doEditUser">
+                <div class="column" style="text-align: center"><span id="error" style="color: red">${errorString}</span><span id="success" style="color: #3eff13">${successString}</span>&nbsp;</div>
+                <div class="column"><h3>Profile</h3></div>
+                <input type="hidden" name="UserID" value="${user.userId}" />
+                <div class="medium-6 columns">
 
-            <div class="clearfix grpelem" id="u1086-6" style="left:-40%;margin-top:0; ">
-                    <img src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer; max-width: 215px;" onclick="document.getElementById('avatar').click(); return false">
-            </div>
-            <div class="grpelem" id="u1735" style="pointer-events: none;"><!-- content -->
-                <div class="fluid_height_spacer"></div>
-            </div>
-        </div>
-    </div>
-    <div class="clearfix colelem" id="u997-4"><!-- content -->
-        <p>Profile</p>
-    </div>
-    <form name="editform" method="POST" action="doEditUser">
-    <div class="rgba-background clearfix colelem" id="u1344"><!-- column -->
-        <div class="clearfix colelem" id="u1766-4"><!-- content -->
-            <p><span id="error">${errorString}</span><span id="success" style="color: #3eff13">${successString}</span></p>
-        </div>
-        <input type="hidden" name="username" value="${user.username}" />
-        <input type="hidden" name="UserID" value="${user.userId}" />
-        Username: ${user.username}
-        <div class="clearfix colelem" id="pu1345-4"><!-- group -->
-            <div class="clearfix grpelem" id="u1345-4"><!-- content -->
-                <p>Name:</p>
-            </div>
-            <div class="grpelem" id="u1353"><input type="text" name="firstName" value="${user_in_edit.firstName}" /></div>
-            <div class="clearfix grpelem" id="u1346-4"><!-- content -->
-                <p>Last Name:</p>
-            </div>
-            <div class="grpelem" id="u1354"><input type="text" name="lastName" value="${user_in_edit.lastName}" /></div>
-        </div>
-        <div class="clearfix colelem" id="pu1347-4"><!-- group -->
-            <div class="clearfix grpelem" id="u1347-4"><!-- content -->
-                <p>City:</p>
-            </div>
-            <div class="grpelem" id="u1355"><input type="text" name="city" value="${user_in_edit.city}" /></div>
-            <div class="clearfix grpelem" id="u1348-4"><!-- content -->
-                <p>Country:</p>
-            </div>
-            <div class="grpelem" id="u1356"><input type="text" name="country" value="${user_in_edit.country}" /></div>
-        </div>
-        <div class="clearfix colelem" id="pu1349-4"><!-- group -->
-            <div class="clearfix grpelem" id="u1349-4"><!-- content -->
-                <p>Looking for:</p>
-            </div>
-            <div class="grpelem" id="u1357">
-                <select name="looking_for" id="looking_for" style="width: 100%;height: 100%;">
-                    <option value="F">Female</option>
-                    <option value="M">Male</option>
-                </select>
-            </div>
-        </div>
-        <div class="clearfix colelem" id="pu1350-4"><!-- group -->
-            <div class="clearfix grpelem" id="u1350-4"><!-- content -->
-                <p>From:</p>
-            </div>
-            <div class="grpelem" id="u1358"><input id="age_from" type="text" name="age_from" value="${user_in_edit.age_from}" /></div>
-            <div class="clearfix grpelem" id="u1351-4"><!-- content -->
-                <p>To:</p>
-            </div>
-            <div class="grpelem" id="u1359"><input id="age_to" type="text" name="age_to" value="${user_in_edit.age_to}" /></div>
-        </div>
-        <div class="clearfix colelem" id="pu1352-4"><!-- group -->
-            <div class="clearfix grpelem" id="u1352-4"><!-- content -->
-                <p>About me:</p>
-            </div>
-            <div class="grpelem" id="u1360"><textarea name="about">${user_in_edit.about}</textarea></div>
-            <div class="transition clearfix grpelem" id="u1785-4"><!-- content -->
-                <p onclick="editform.submit()" style="cursor: pointer">Save Changes</p></a>
-            </div>
-        </div>
-    </div>
-    </form>
-
-    <div class="clearfix colelem" id="u1491-4"><!-- content -->
-        <p>Password change</p>
-    </div>
-
-    <form name="editPasswordForm" method="POST" action="doEditUser">
-
-        <input type="hidden" name="passwordForm" value="true" />
-        <input type="hidden" name="username" value="${user.username}" />
-        <input type="hidden" name="UserID" value="${user.userId}" />
-
-    <div class="rgba-background clearfix colelem" id="u1470"><!-- group -->
+                    <label>Username
+                        <input type="text" placeholder="Name" name="username" value="${user_in_edit.username}" readonly>
+                    </label>
+                    <label>Name
+                        <input type="text" placeholder="Name" name="firstName" value="${user_in_edit.firstName}">
+                    </label>
+                    <label>Last name
+                        <input type="text" placeholder="Last name" name="lastName" value="${user_in_edit.lastName}">
+                    </label>
+                    <label>City
+                        <input type="text" placeholder="City" name="city" value="${user_in_edit.city}">
+                    </label>
+                    <label>Country
+                        <input type="text" placeholder="Country" name="country" value="${user_in_edit.country}">
+                    </label>
 
 
 
-        <div class="clearfix grpelem" id="u1473-4"><!-- content -->
-            <p>Password:</p>
-        </div>
-        <div class="grpelem" id="u1475"><input type="text" name="password" value="" /></div>
-        <div class="clearfix grpelem" id="u1474-4"><!-- content -->
-            <p>Repeat Password:</p>
-        </div>
-        <div class="grpelem" id="u1476"><input type="text" name="password_repeat" value="" /></div>
-        <div class="transition clearfix grpelem" id="u1485-4"><!-- content -->
-            <p onclick="editPasswordForm.submit()" style="cursor: pointer">Change</p>
-        </div>
-    </div>
-    </form>
+                </div>
+                <div class="medium-6 columns">
+                    <label>Looking for
+                        <select name="looking_for" id="looking_for" value="${user_in_edit.looking_for}">
+                            <option value="F">Female</option>
+                            <option value="M">Male</option>
+                        </select>
+                    </label>
+                    <label>From
+                        <input placeholder="From" id="age_from" type="text" name="age_from" value="${user_in_edit.age_from}">
+                    </label>
+                    <label>To
+                        <input placeholder="To" id="age_to" type="text" name="age_to" value="${user_in_edit.age_to}">
+                    </label>
 
-    <div class="verticalspacer" data-offset-top="1128" data-content-above-spacer="1127" data-content-below-spacer="84"></div>
-    <div class="clearfix colelem" id="u123-4"><!-- content -->
-        <p>Copyright 2016 All rights reserved to Java2 development team</p>
+                    <label>
+                        About
+                        <textarea placeholder="About" name="about" style="height: 3.9rem; line-height:1.2">${user_in_edit.about}</textarea>
+                    </label>
+                    <input type="submit" class="button expanded" value="Submit">
+                </div>
+                </form>
+            </div>
+
+            <div class="row">
+                    <div class="column"><h3>Profile</h3></div>
+                    <form name="editPasswordForm" method="POST" action="doEditUser">
+                        <input type="hidden" name="passwordForm" value="true" />
+                        <input type="hidden" name="username" value="${user.username}" />
+                        <input type="hidden" name="UserID" value="${user.userId}" />
+
+                    <div class="medium-6 columns">
+                        <label>Password
+                            <input type="text" placeholder="New password" name="password" value="">
+                        </label>
+                    </div>
+                    <div class="medium-6 columns">
+                        <label>Password repeat
+                            <input placeholder="Repeat new password" type="text" name="password_repeat" value="">
+                        </label>
+                        <input type="submit" class="button expanded" value="Submit">
+                    </div>
+                </form>
+            </div>
+
+        </div>
     </div>
 </div>
-</form>
-<!-- Other scripts -->
 
-<script src="media/scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
+<script>
+    $(document).foundation();
+</script>
 <script>
     $( document ).ready(function() {
         $("#sex").val("${user_in_edit.sex}");
@@ -240,7 +197,7 @@
                         $('#error').text(php_script_response);
                     }
 
-                     // display response from the PHP script, if any
+                    // display response from the PHP script, if any
                 }
             });
         });
