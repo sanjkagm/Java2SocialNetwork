@@ -1,8 +1,8 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.UserDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
+
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.LoginService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
 
 
 @WebServlet(urlPatterns = { "/login"})
@@ -27,19 +28,15 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
 
-        HttpSession session = request.getSession();
-
-        User user = new User();
-        User userInSession = user.getLoginedUser(session);
+        LoginService loginService = new LoginService();
+        User userInSession = loginService.checkIfUserLoggedIn(request);
 
         if (userInSession != null) {
             response.sendRedirect("/userInfo");
             return;
         }
 
-
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/loginView.jsp");
-
         dispatcher.forward(request, response);
 
     }

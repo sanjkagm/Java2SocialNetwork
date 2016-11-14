@@ -219,6 +219,10 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
                     .prepareStatement("update USERS set FirstName = ?, LastName = ? , city = ?, country = ?, looking_for = ?, " +
                             "age_from = ?, age_to = ?, about = ? " +
                             "where UserID = ?");
+
+            preparedStatement.executeQuery("SET NAMES 'UTF8'");
+            preparedStatement.executeQuery("SET CHARACTER SET 'UTF8'");
+
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getCity());

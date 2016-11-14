@@ -17,10 +17,10 @@
 </head>
 <body>
 
-<div class="off-canvas-wrapper" style="height:100% !important">
-    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper style="height:100%">
+<div class="off-canvas-wrapper" style="height:100% !important;background-color:#e6e6e6;">
+    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper style="height:100%;background-color:#e6e6e6;">
 
-        <div style="width: 246px; z-index:0" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
+        <div style="width: 240px; z-index:0" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
             <div class="row column">
                 <br>
                 <form name="uploadForm" id="uploadForm" method="POST" action="doEditUser" enctype="multipart/form-data">
@@ -28,7 +28,7 @@
                     <input type="file" id="avatar" name="avatar" style="display:none;"/>
                     <!--<input type="submit" value="upload" />-->
                 </form>
-                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer; max-width: 215px;" onclick="document.getElementById('avatar').click(); return false">
+                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer; max-width: 215px;">
                 <h5><a href="${pageContext.request.contextPath}/editUser">${user.firstName} ${user.lastName}</a></h5>
                 <h6 style="font-size: 0.9rem">${user.country}, ${user.city}</h6>
                 <p>${user.about}</p>
@@ -128,6 +128,10 @@
                 </form>
             </div>
 
+            <div class="row column" style="text-align:center; max-width: 100%">
+                <p><small>All rights reserved to Java2 development team &copy; 2016</small></p>
+            </div>
+
         </div>
     </div>
 </div>
@@ -145,6 +149,13 @@
             $("#age_from").val("")
         if ($("#age_to").val() == 0 )
             $("#age_to").val("")
+
+        $('#avatarImg').on('click', function() {
+            document.getElementById('avatar').click(); return false;
+        });
+
+
+
 
         $(function () {
             $(":file").change(function () {

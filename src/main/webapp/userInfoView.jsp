@@ -17,10 +17,10 @@
 </head>
 <body>
 
-<div class="off-canvas-wrapper" style="height:100% !important">
-    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper style="height:100%">
+<div class="off-canvas-wrapper" style="height:100% !important;background-color:#e6e6e6;">
+    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper style="height:100%;background-color:#e6e6e6;">
 
-        <div style="width: 246px; z-index:0" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
+        <div style="width: 240px; z-index:0;height:100%" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
             <div class="row column">
                 <br>
                 <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="max-width: 215px;">
@@ -105,32 +105,10 @@
                 </div>
             </div>
 
-            <hr>
-
-            <div class="row">
-                <div class="medium-6 columns">
-                    <h3>Contact Me</h3>
-                    <p>Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor.</p>
-                    <ul class="menu">
-                        <li><a href="#">Dribbble</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Yo</a></li>
-                    </ul>
-                </div>
-                <div class="medium-6 columns">
-                    <label>Name
-                        <input type="text" placeholder="Name">
-                    </label>
-                    <label>Email
-                        <input type="text" placeholder="Email">
-                    </label>
-                    <label>
-                        Message
-                        <textarea placeholder="holla at a designerd"></textarea>
-                    </label>
-                    <input type="submit" class="button expanded" value="Submit">
-                </div>
+            <div class="row column" style="text-align:center; max-width: 100%">
+                <p><small>All rights reserved to Java2 development team &copy; 2016</small></p>
             </div>
+
         </div>
     </div>
 </div>

@@ -24,7 +24,7 @@
     <script>
         function display_error()
         {
-            alert("${errorString}");
+            alert(`${errorString}`);
             document.loginForm.username.focus();
         }
     </script>
@@ -40,9 +40,7 @@
 
         </div>
         <h3>Welcome to Java2</h3>
-        <p>Perfectly designed and precisely prepared social network web app.
-            <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
-        </p>
+        <p>Perfectly designed and precisely prepared social network web app.</p>
         <p>Login in. To see it in action.</p>
         <form class="m-t" role="form" method="post" action="doLogin" name="loginForm">
             <div class="form-group">
@@ -66,7 +64,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script>
     $( document ).ready(function() {
-        if ("" != "${errorString}")
+        if ("" != `${errorString}`)
             display_error();
 
     });
