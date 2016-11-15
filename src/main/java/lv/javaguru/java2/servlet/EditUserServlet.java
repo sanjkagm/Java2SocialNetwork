@@ -1,9 +1,7 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.DBException;
-import lv.javaguru.java2.database.UserDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.EditUserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -29,25 +26,18 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
 
+        EditUserService editUserService = new EditUserService();
+        User userInSession = editUserService.checkIfUserLoggedIn(request);
 
-        // Check User has logged on
-        UserDAOImpl userDAOObj = new UserDAOImpl();
-        User loginedUser = User.getLoginedUser(session);
-
-
-        // Not logged in
-        if (loginedUser == null) {
-
-            // Redirect to login page.
+        if (userInSession == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         // Store info in request attribute
-        request.setAttribute("user", loginedUser);
-        request.setAttribute("user_in_edit", loginedUser);
+        request.setAttribute("user", userInSession);
+        request.setAttribute("user_in_edit", userInSession);
 
 
 

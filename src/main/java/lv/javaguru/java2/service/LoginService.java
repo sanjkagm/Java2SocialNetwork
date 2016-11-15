@@ -4,23 +4,12 @@ import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 /**
  * Created by Pavel on 14.11.2016..
  */
-public class LoginService {
-
-    private static final String ATT_NAME_USER_NAME = "ATTRIBUTE_FOR_STORE_USER_NAME_IN_COOKIE";
-
-    public User checkIfUserLoggedIn(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        User loginedUser = (User) session.getAttribute("loginedUser");
-        return loginedUser;
-    }
+public class LoginService extends Utils {
 
     public boolean validateUseLoginAndPassword(String username, String password) {
         if (username == null || password == null
@@ -42,20 +31,7 @@ public class LoginService {
         return user;
     }
 
-    public void storeLoggedUserInSession(HttpServletRequest request, User loginedUser) {
-        HttpSession session = request.getSession();
-        // On the JSP can access ${loginedUser}
-        session.setAttribute("loginedUser", loginedUser);
-    }
 
-    public void storeUserCookie(HttpServletResponse response, User user) {
-        System.out.println("Store user cookie");
-        Cookie cookieUserName = new Cookie(ATT_NAME_USER_NAME, user.getUsername());
-
-        // 1 day (Convert to seconds)
-        cookieUserName.setMaxAge(24 * 60 * 60);
-        response.addCookie(cookieUserName);
-    }
 
     public String authenticate(String username, String password) {
         User user;

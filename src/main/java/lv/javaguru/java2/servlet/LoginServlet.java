@@ -27,7 +27,6 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         LoginService loginService = new LoginService();
         User userInSession = loginService.checkIfUserLoggedIn(request);
 

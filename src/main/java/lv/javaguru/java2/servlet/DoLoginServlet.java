@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.LoginService;
+import lv.javaguru.java2.service.Utils;
 
 @WebServlet(urlPatterns = { "/doLogin" })
 public class DoLoginServlet extends HttpServlet {

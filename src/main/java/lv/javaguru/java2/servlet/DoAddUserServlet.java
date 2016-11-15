@@ -52,7 +52,7 @@ public class DoAddUserServlet extends HttpServlet {
 
         // If error, forward to Edit page with pre-entered data.
         if (resultOfRegistration != null) {
-            User user = addUserService.createUserByBuilder(username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
+            User user = addUserService.createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
             request.setAttribute("errorString", resultOfRegistration);
             request.setAttribute("user", user);

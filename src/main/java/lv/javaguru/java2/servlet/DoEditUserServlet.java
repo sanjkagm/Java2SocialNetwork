@@ -4,6 +4,7 @@ import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.EditUserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 
 import static lv.javaguru.java2.domain.User.isEmpty;
 import static lv.javaguru.java2.domain.UserBuilder.createUser;
@@ -24,7 +26,7 @@ import static lv.javaguru.java2.domain.UserBuilder.createUser;
 public class DoEditUserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private UserDAO userDAOObj = new UserDAOImpl();
+
 
     public DoEditUserServlet() {
         super();
@@ -34,134 +36,70 @@ public class DoEditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        // Check User has logged on
-        UserDAOImpl userDAOObj = new UserDAOImpl();
-        User loginedUser = User.getLoginedUser(session);
-        // Not logged in
-        if (loginedUser == null) {
-            // Redirect to login page.
+
+
+
+        EditUserService editUserService = new EditUserService();
+        User userInSession = editUserService.checkIfUserLoggedIn(request);
+
+        if (userInSession == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
+        String userIdStr = request.getParameter("UserID");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String password_repeat = request.getParameter("password_repeat");
 
-        String userIdStr = (String) request.getParameter("UserID");
-        String username = (String) request.getParameter("username");
-        String password = (String) request.getParameter("password");
-        String password_repeat = (String) request.getParameter("password_repeat");
+        String date_of_birth = userInSession.getDate_of_birth();
 
-        //String date_of_birth = (String) request.getParameter("date_of_birth");
-        String firstName = (String) request.getParameter("firstName");
-        String lastName = (String) request.getParameter("lastName");
-        String city = (String) request.getParameter("city");
-        String country = (String) request.getParameter("country");
-        //String sex = (String) request.getParameter("sex");
-        String looking_for = (String) request.getParameter("looking_for");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String city = request.getParameter("city");
+        String country = request.getParameter("country");
+
+        String sex = userInSession.getSex();
+
+        String looking_for = request.getParameter("looking_for");
         String age_fromStr = request.getParameter("age_from");
         String age_toStr = request.getParameter("age_to");
-        String about = (String) request.getParameter("about");
+        String about = request.getParameter("about");
 
-        String passwordForm = (String) request.getParameter("passwordForm");
-
-
-        int age_from;
-        int age_to;
-        Long userId;
-
-        try {
-            age_from = Integer.parseInt(age_fromStr);
-        } catch (Exception e) {
-            age_from = 0;
-        }
-        try {
-            age_to = Integer.parseInt(age_toStr);
-        } catch (Exception e) {
-            age_to = 0;
-        }
-        try {
-            userId = Long.parseLong(userIdStr);
-        } catch (Exception e) {
-            userId = 0L;
-        }
+        String passwordForm = request.getParameter("passwordForm");
 
 
 
 
-
-        String errorString = null, successString;
-
-
-
-            User user = createUser()
-                    .withUserId(userId)
-                    .withUsername(username)
-                    .withPassword(password)
-                    .withFirstName(firstName)
-                    .withLastName(lastName)
-                    .withCity(city)
-                    .withCountry(country)
-                    .withLooking_for(looking_for)
-                    .withAge_from(age_from)
-                    .withAge_to(age_to)
-                    .withAbout(about).build();
+        String errorString, successString;
+        User user = editUserService.createUserByBuilder(userIdStr,username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
 
         if (!isEmpty(passwordForm)) {   // Password change form handler
 
-            if (!password.equals(password_repeat))
-                errorString = "Passwords not match!";
+            errorString = editUserService.updatePassword(password, password_repeat,userIdStr);
 
-            if (isEmpty(password))
-                errorString = "Password cannot be empty!";
-
-            if (errorString == null) {
-                try {
-                    userDAOObj.updatePassword(user);
-                } catch (DBException e) {
-                    e.printStackTrace();
-                    errorString = e.getMessage();
-                }
-            }
-
-            request.setAttribute("user", User.getLoginedUser(session));
-            request.setAttribute("user_in_edit", User.getLoginedUser(session));
+            request.setAttribute("user", userInSession);
+            request.setAttribute("user_in_edit", userInSession);
 
             successString = "Password successfully updated!";
 
         } else {    // User info form handler
 
-            if (isEmpty(firstName) ||
-                    isEmpty(lastName) ||
-                    isEmpty(looking_for)) {
-                errorString = "Fill all mandatory fields!";
-            }
+            errorString = editUserService.updateUserInfo(userIdStr,username,firstName,lastName,city,country,looking_for,age_fromStr,age_toStr,about,sex,date_of_birth);
 
-            if (errorString == null) {
-                try {
-                    userDAOObj.update(user);
-                } catch (DBException e) {
-                    e.printStackTrace();
-                    errorString = e.getMessage();
-                }
-            }
-
-            request.setAttribute("user", User.getLoginedUser(session));
+            request.setAttribute("user", userInSession);
             request.setAttribute("user_in_edit", user);
 
             successString = "User successfully updated!";
-
         }
 
         // Store infomation to request attribute, before forward to views.
         request.setAttribute("errorString", errorString);
 
-
-
         // If error, forward to Edit page.
         if (errorString != null) {
-            RequestDispatcher dispatcher = request.getServletContext()
-                    .getRequestDispatcher("/editUserView.jsp");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/editUserView.jsp");
             dispatcher.forward(request, response);
         }
 
@@ -170,17 +108,12 @@ public class DoEditUserServlet extends HttpServlet {
         else {
             if (isEmpty(passwordForm)) {
                 request.setAttribute("user", user);
-                User.storeLoginedUser(session, user);
+                editUserService.storeLoggedUserInSession(request,user);
             }
-
             request.setAttribute("successString", successString);
-
-            //response.sendRedirect(request.getContextPath() + "/login");
-            RequestDispatcher dispatcher = request.getServletContext()
-                    .getRequestDispatcher("/editUserView.jsp");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/editUserView.jsp");
             dispatcher.forward(request, response);
         }
-
     }
 
     @Override

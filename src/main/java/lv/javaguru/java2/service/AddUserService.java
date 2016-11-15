@@ -11,17 +11,9 @@ import static lv.javaguru.java2.domain.UserBuilder.createUser;
 /**
  * Created by Pavel on 15.11.2016..
  */
-public class AddUserService {
+public class AddUserService extends Utils {
 
-    public Integer stringToInteger (String ageStr) {
-        int age;
-        try {
-            age = Integer.parseInt(ageStr);
-        } catch (Exception e) {
-            age = 0;
-        }
-        return age;
-    }
+
 
     public String validateInput(String username,
                                 String password,
@@ -50,7 +42,7 @@ public class AddUserService {
         return errorString;
     }
 
-    public User createUserByBuilder (String username,
+    /*public User createUserByBuilder (String username,
                                      String password,
                                      String date_of_birth,
                                      String firstName,
@@ -81,7 +73,7 @@ public class AddUserService {
                 .withAge_to(age_to)
                 .withAbout(about).build();
 
-    }
+    }*/
 
     public String register(String username,
                            String password,
@@ -102,7 +94,7 @@ public class AddUserService {
         if (errorString == null) {
             try {
                 UserDAO userDAOObj = new UserDAOImpl();
-                User user = createUserByBuilder(username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
+                User user = createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
                 userDAOObj.create(user);
             } catch (DBException e) {
                 e.printStackTrace();
