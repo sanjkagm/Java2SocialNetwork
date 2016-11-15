@@ -2,6 +2,7 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.Utils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,12 +28,12 @@ public class UserInfoServlet extends HttpServlet {
 
 
         // Check User has logged on
-        UserDAOImpl userDAOObj = new UserDAOImpl();
-        User loginedUser = User.getLoginedUser(session);
+        Utils utils = new Utils();
+        User userInSession = utils.checkIfUserLoggedIn(request);
 
 
         // Not logged in
-        if (loginedUser == null) {
+        if (userInSession == null) {
 
             // Redirect to login page.
             response.sendRedirect(request.getContextPath() + "/login");
@@ -40,7 +41,7 @@ public class UserInfoServlet extends HttpServlet {
         }
 
         // Store info in request attribute
-        request.setAttribute("user", loginedUser);
+        request.setAttribute("user", userInSession);
 
 
         // Logined, forward to /WEB-INF/userInfoView.jsp

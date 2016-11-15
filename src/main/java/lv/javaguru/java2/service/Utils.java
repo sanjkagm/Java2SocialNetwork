@@ -89,4 +89,35 @@ public class Utils {
                 .withAge_to(age_to)
                 .withAbout(about).build();
     }
+
+    public static boolean isEmpty(final String string) {
+        return string == null || string.trim().isEmpty();
+    }
+
+    // Delete cookie.
+    public void deleteUserCookie(HttpServletResponse response) {
+        Cookie cookieUserName = new Cookie(ATT_NAME_USER_NAME, null);
+        System.out.println("Delete user cookie");
+        // 0 seconds (Expires immediately)
+        cookieUserName.setMaxAge(0);
+        response.addCookie(cookieUserName);
+    }
+
+    public String getUserNameInCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (ATT_NAME_USER_NAME.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    // Store user info in Session.
+    public void storeLoginedUser(HttpSession session, User loginedUser) {
+        // On the JSP can access ${loginedUser}
+        session.setAttribute("loginedUser", loginedUser);
+    }
 }

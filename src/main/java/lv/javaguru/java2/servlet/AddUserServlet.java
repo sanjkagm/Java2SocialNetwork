@@ -23,8 +23,7 @@ public class AddUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        RequestDispatcher dispatcher = request.getServletContext()
-                .getRequestDispatcher("/addUserView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/addUserView.jsp");
         dispatcher.forward(request, response);
 
     }

@@ -6,6 +6,7 @@ package lv.javaguru.java2.filter;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.Utils;
 
 import java.io.IOException;
 
@@ -43,8 +44,9 @@ public class CookieFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
 
-        UserDAO userDAOObj = new UserDAOImpl();
-        User userInSession = User.getLoginedUser(session);
+
+        Utils utils = new Utils();
+        User userInSession = utils.checkIfUserLoggedIn((HttpServletRequest)request);
 
         if (userInSession != null) {
             session.setAttribute("COOKIE_CHECKED", "CHECKED");
@@ -59,10 +61,11 @@ public class CookieFilter implements Filter {
         // Flag check cookie
         String checked = (String) session.getAttribute("COOKIE_CHECKED");
         if (checked == null) {
-            String userName = User.getUserNameInCookie(req);
+            String userName = utils.getUserNameInCookie(req);
             try {
+                UserDAO userDAOObj = new UserDAOImpl();
                 User user = userDAOObj.getByUsername(userName);
-                User.storeLoginedUser(session, user);
+                utils.storeLoginedUser(session, user);
             } catch (Exception e) {
                 e.printStackTrace();
             }

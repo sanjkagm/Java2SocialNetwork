@@ -2,6 +2,7 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.Utils;
 
 
 import javax.servlet.ServletException;
@@ -29,10 +30,9 @@ public class LogoutServlet extends HttpServlet {
         if(session != null) {
             session.invalidate();
             //Delete user cookie
-            User user = new User();
-            user.deleteUserCookie(response);
+            Utils utils = new Utils();
+            utils.deleteUserCookie(response);
         }
-        //request.getRequestDispatcher("/login").forward(request,response);
         response.sendRedirect("/");
 
     }

@@ -6,7 +6,6 @@ import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 
 
-import static lv.javaguru.java2.domain.User.isEmpty;
 import static lv.javaguru.java2.domain.UserBuilder.createUser;
 
 /**

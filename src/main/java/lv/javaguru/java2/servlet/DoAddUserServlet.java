@@ -22,8 +22,6 @@ import java.io.IOException;
 public class DoAddUserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private UserDAO userDAOObj = new UserDAOImpl();
-
     public DoAddUserServlet() {
         super();
     }

@@ -5,8 +5,7 @@ import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 
-import static lv.javaguru.java2.domain.User.isEmpty;
-import static lv.javaguru.java2.domain.UserBuilder.createUser;
+
 
 /**
  * Created by Pavel on 15.11.2016..
@@ -42,38 +41,7 @@ public class AddUserService extends Utils {
         return errorString;
     }
 
-    /*public User createUserByBuilder (String username,
-                                     String password,
-                                     String date_of_birth,
-                                     String firstName,
-                                     String lastName,
-                                     String sex,
-                                     String city,
-                                     String country,
-                                     String looking_for,
-                                     String age_fromStr,
-                                     String age_toStr,
-                                     String about)
 
-    {
-        int age_from = stringToInteger(age_fromStr);
-        int age_to = stringToInteger(age_toStr);
-
-        return createUser()
-                .withUsername(username)
-                .withPassword(password)
-                .withFirstName(firstName)
-                .withLastName(lastName)
-                .withDate_of_birth(date_of_birth)
-                .withCity(city)
-                .withCountry(country)
-                .withSex(sex)
-                .withLooking_for(looking_for)
-                .withAge_from(age_from)
-                .withAge_to(age_to)
-                .withAbout(about).build();
-
-    }*/
 
     public String register(String username,
                            String password,

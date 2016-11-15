@@ -1,8 +1,5 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.DBException;
-import lv.javaguru.java2.database.UserDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.EditUserService;
 
@@ -12,12 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
 
-import static lv.javaguru.java2.domain.User.isEmpty;
-import static lv.javaguru.java2.domain.UserBuilder.createUser;
+import static lv.javaguru.java2.service.Utils.isEmpty;
+
 
 /**
  * Created by Pavel on 07.11.2016..
