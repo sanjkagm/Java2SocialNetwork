@@ -1,9 +1,10 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.DBException;
+
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.AddUserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,10 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
-import static lv.javaguru.java2.domain.User.isEmpty;
-import static lv.javaguru.java2.domain.UserBuilder.createUser;
 
 /**
  * Created by Pavel on 06.11.2016..
@@ -34,110 +32,43 @@ public class DoAddUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String username = (String) request.getParameter("username");
-        String password = (String) request.getParameter("password");
-        String password_repeat = (String) request.getParameter("password_repeat");
-
-        String date_of_birth = (String) request.getParameter("date_of_birth");
-        String firstName = (String) request.getParameter("firstName");
-        String lastName = (String) request.getParameter("lastName");
-        String city = (String) request.getParameter("city");
-        String country = (String) request.getParameter("country");
-        String sex = (String) request.getParameter("sex");
-        String looking_for = (String) request.getParameter("looking_for");
-        String age_fromStr = request.getParameter("age_from");
-        String age_toStr = request.getParameter("age_to");
-        String about = (String) request.getParameter("about");
-
-
-        int age_from;
-        int age_to;
-
-        try {
-            age_from = Integer.parseInt(age_fromStr);
-        } catch (Exception e) {
-            age_from = 0;
-        }
-        try {
-            age_to = Integer.parseInt(age_toStr);
-        } catch (Exception e) {
-            age_to = 0;
-        }
+        String username =           request.getParameter("username");
+        String password =           request.getParameter("password");
+        String password_repeat =    request.getParameter("password_repeat");
+        String date_of_birth =      request.getParameter("date_of_birth");
+        String firstName =          request.getParameter("firstName");
+        String lastName =           request.getParameter("lastName");
+        String city =               request.getParameter("city");
+        String country =            request.getParameter("country");
+        String sex =                request.getParameter("sex");
+        String looking_for =        request.getParameter("looking_for");
+        String age_fromStr =        request.getParameter("age_from");
+        String age_toStr =          request.getParameter("age_to");
+        String about =              request.getParameter("about");
 
 
-        User user = createUser()
-                .withUsername(username)
-                .withPassword(password)
-                .withFirstName(firstName)
-                .withLastName(lastName)
-                .withDate_of_birth(date_of_birth)
-                .withCity(city)
-                .withCountry(country)
-                .withSex(sex)
-                .withLooking_for(looking_for)
-                .withAge_from(age_from)
-                .withAge_to(age_to)
-                .withAbout(about).build();
+        AddUserService addUserService = new AddUserService();
+        String resultOfRegistration = addUserService.register(username,password,password_repeat,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
+        // If error, forward to Edit page with pre-entered data.
+        if (resultOfRegistration != null) {
+            User user = addUserService.createUserByBuilder(username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
-
-        String errorString = null, successString;
-
-        if (!password.equals(password_repeat))
-            errorString = "Passwords not match!";
-
-        if (isEmpty(username) ||
-            isEmpty(password) ||
-            isEmpty(password_repeat) ||
-            isEmpty(date_of_birth) ||
-            isEmpty(firstName) ||
-            isEmpty(lastName) ||
-            isEmpty(sex))
-        {
-            errorString = "Fill all mandatory fields!";
-        }
-
-
-        if (errorString == null) {
-            try {
-                userDAOObj.create(user);
-            } catch (DBException e) {
-                e.printStackTrace();
-                if ( e.getMessage().toLowerCase().contains("duplicate entry") ) {
-                    errorString = "User already exists!";
-                }
-                else
-                    errorString = e.getMessage();
-            }
-        }
-
-        // Store information to request attribute, before forward to views.
-
-
-        // If error, forward to Edit page.
-        if (errorString != null) {
-            request.setAttribute("errorString", errorString);
+            request.setAttribute("errorString", resultOfRegistration);
             request.setAttribute("user", user);
-
-            RequestDispatcher dispatcher = request.getServletContext()
-                    .getRequestDispatcher("/addUserView.jsp");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/addUserView.jsp");
             dispatcher.forward(request, response);
+            return;
         }
 
         // If everything nice.
-        // Redirect to login page or display success message.
+        // Display success message.
         else {
-            //successString = "User successfully created!<br> Now you can <a href='" + request.getContextPath() + "/login'>Login</a>";
-            successString = "User successfully created! Now you can Login";
-            request.setAttribute("successString", successString);
-
-
-            //response.sendRedirect(request.getContextPath() + "/login");
-            RequestDispatcher dispatcher = request.getServletContext()
-                    .getRequestDispatcher("/addUserView.jsp");
+            request.setAttribute("successString", "User successfully created! Now you can Login");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/addUserView.jsp");
             dispatcher.forward(request, response);
+            return;
         }
-
     }
 
     @Override

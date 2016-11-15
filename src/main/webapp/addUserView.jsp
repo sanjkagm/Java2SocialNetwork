@@ -147,10 +147,10 @@
             $("#age_to").val("")
 
 
-        if ("" != "${errorString}")
-            message1("${errorString}");
-        if ("" != "${successString}")
-            message2("${successString}");
+        if ("" != `${errorString}`)
+            message1(`${errorString}`);
+        if ("" != `${successString}`)
+            message2(`${successString}`);
 
 
     });
