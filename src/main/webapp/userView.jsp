@@ -7,47 +7,13 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="true" %>
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JAVA2 | User Info</title>
-    <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/font-awesome/css/font-awesome.css">
-    <style>
-        .alert-box.warning {
-            background-color: #f08a24;
-            border-color: #de770f;
-            color: #ffffff;
-        }
-        .alert-box.round {
-            border-radius: 1000px;
-        }
-        .alert-box.success {
-            background-color: #43ac6a;
-            border-color: #3a945b;
-            color: #ffffff;
-        }
-        .alert-box.radius {
-            border-radius: 3px;
-        }
-        .alert-box {
-            background-color: #008cba;
-            border-color: #0078a0;
-            border-style: solid;
-            border-width: 1px;
-            color: #ffffff;
-            display: block;
-            font-size: 0.72222rem;
-            font-weight: normal;
-            margin-bottom: 1.11111rem;
-            padding: 0.77778rem 1.33333rem 0.77778rem 0.77778rem;
-            position: relative;
-            transition: opacity 300ms ease-out 0s;
-        }
-    </style>
+    <jsp:include page="_header.jsp"></jsp:include>
 </head>
 <body>
 
@@ -142,11 +108,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
-<script>
-    $(document).foundation();
-</script>
+<jsp:include page="_footer.jsp"></jsp:include>
 <script>
     $( document ).ready(function() {
 
@@ -159,37 +121,61 @@
         $('input,textarea').attr('readonly', 'true');
 
 
-        $("[action='add'],[action='remove']").click(function(e) {
+        var confirmMessage = "Are you sure?";
+
+        $("[action='add'],[action='remove']").on('click', function (e) {
             e.preventDefault();
-            $("#friendAlert").hide();
+            //$("#alertMessage").hide();
 
-            var url = "/friend/" + $("#friendLink").attr("action");
-
-            $.ajax({
-                url : url,
-                type: "POST",
-                data : {user_id: ${user.userId}, friend_id:${userFound.userId}},
-                success: function(data, textStatus, jqXHR)
-                {
-                    if (data == 'true') {
-                        $("#alertMessage").html("You are now friends with ${userFound.firstName} ${userFound.lastName}");
-                        $("#alertMessage").show();
-                        $("#friendLink").attr("action","remove");
-                        $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Remove friend");
+            if ($("#friendLink").attr("action")=='add')
+                var confirmMsg = 'Add ${userFound.firstName} ${userFound.lastName} to friends?';
+            else
+                var confirmMsg = 'Remove ${userFound.firstName} ${userFound.lastName} from friends?';
+            $.confirm({
+                title: 'Confirm!',
+                content: confirmMsg,
+                useBootstrap: false,
+                buttons: {
+                    confirm: function () {
+                        //$.alert('Confirmed!');
+                        act();
+                    },
+                    cancel: function () {
+                        //$.alert('Canceled!');
                     }
-                    else if (data == 'false') {
-                        $("#alertMessage").html("${userFound.firstName} ${userFound.lastName} was just removed from your friends.");
-                        $("#alertMessage").show();
-                        $("#friendLink").attr("action","add");
-                        $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Add friend");
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-
                 }
             });
+
+            function act() {
+                    var url = "/friend/" + $("#friendLink").attr("action");
+                    $.ajax({
+                        url : url,
+                        type: "POST",
+                        data : {user_id: ${user.userId}, friend_id:${userFound.userId}},
+                        success: function(data, textStatus, jqXHR)
+                        {
+                            if (data == 'true') {
+                                $("#alertMessage").html("You are now friends with ${userFound.firstName} ${userFound.lastName}");
+                                $("#alertMessage").show();
+                                $("#friendLink").attr("action","remove");
+                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Remove friend");
+                            }
+                            else if (data == 'false') {
+                                $("#alertMessage").html("${userFound.firstName} ${userFound.lastName} was just removed from your friends.");
+                                $("#alertMessage").show();
+                                $("#friendLink").attr("action","add");
+                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Add friend");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+
+                        }
+                    });
+            }
+
         })
+
     });
 
 </script>

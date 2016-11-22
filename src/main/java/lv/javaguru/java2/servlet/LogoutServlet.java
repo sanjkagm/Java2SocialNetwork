@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(urlPatterns = { "/logout"})
 public class LogoutServlet extends HttpServlet {
@@ -32,6 +33,7 @@ public class LogoutServlet extends HttpServlet {
             //Delete user cookie
             Utils utils = new Utils();
             utils.deleteUserCookie(response);
+
         }
         response.sendRedirect("/");
 

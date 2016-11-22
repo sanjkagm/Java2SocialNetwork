@@ -65,7 +65,7 @@ public class CookieFilter implements Filter {
             try {
                 UserDAO userDAOObj = new UserDAOImpl();
                 User user = userDAOObj.getByUsername(userName);
-                utils.storeLoginedUser(session, user);
+                utils.storeLoggedUserInSession((HttpServletRequest)request, user);
             } catch (Exception e) {
                 e.printStackTrace();
             }

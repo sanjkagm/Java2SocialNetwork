@@ -61,6 +61,9 @@ public class DoSearchServlet extends HttpServlet {
                     "                    No matches.\n" +
                     "                </div>");
 
+        List<User> onlineUsers = (List<User>) request.getServletContext().getAttribute("onlineUsers");
+        request.setAttribute("online", onlineUsers);
+
 
         request.setAttribute("usersFound", usersFound);
         RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/searchView.jsp");

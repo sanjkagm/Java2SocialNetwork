@@ -1,11 +1,16 @@
 package lv.javaguru.java2.service;
 
+import lv.javaguru.java2.database.UserDAO;
+import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static lv.javaguru.java2.domain.UserBuilder.createUser;
 
@@ -25,6 +30,15 @@ public class Utils {
         HttpSession session = request.getSession();
         // On the JSP can access ${loginedUser}
         session.setAttribute("loginedUser", loginedUser);
+        if(null == request.getServletContext().getAttribute("onlineUsers"))
+            request.getServletContext().setAttribute("onlineUsers", new ArrayList<User>());
+
+        List<User> onlineUsers = (List<User>) request.getServletContext().getAttribute("onlineUsers");
+        if (loginedUser != null) {
+            onlineUsers.add(loginedUser);
+            System.out.println("User added: " + loginedUser.getUserId() + " " + loginedUser.getUsername());
+        }
+
     }
 
     public void storeUserCookie(HttpServletResponse response, User user) {
@@ -119,5 +133,9 @@ public class Utils {
     public void storeLoginedUser(HttpSession session, User loginedUser) {
         // On the JSP can access ${loginedUser}
         session.setAttribute("loginedUser", loginedUser);
+
+
     }
+
+
 }

@@ -13,8 +13,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JAVA2 | Edit info</title>
-    <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <jsp:include page="_header.jsp"></jsp:include>
 </head>
 <body>
 
@@ -132,11 +131,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
-<script>
-    $(document).foundation();
-</script>
+<jsp:include page="_footer.jsp"></jsp:include>
 <script>
     $( document ).ready(function() {
         $("#sex").val("${user_in_edit.sex}");

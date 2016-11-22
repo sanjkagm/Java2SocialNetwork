@@ -29,6 +29,12 @@
         <param-value>default.jpg</param-value>
     </context-param>
 
+    <listener>
+        <listener-class>lv.javaguru.java2.service.SessionCounter</listener-class>
+    </listener>
 
+    <session-config>
+        <session-timeout>2</session-timeout> <!-- in minutes -->
+    </session-config>
 
 </web-app>

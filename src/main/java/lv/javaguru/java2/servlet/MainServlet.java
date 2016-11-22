@@ -2,8 +2,6 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.MainService;
-import lv.javaguru.java2.service.SearchService;
-import lv.javaguru.java2.service.Utils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,6 +44,11 @@ public class MainServlet extends HttpServlet {
 
         request.setAttribute("usersFound", usersFound);
 
+
+        List<User> onlineUsers = (List<User>) request.getServletContext().getAttribute("onlineUsers");
+        request.setAttribute("online", onlineUsers);
+
+        //System.out.println(onlineUsers.size());
 
         // Logined, forward to /mainView.jsp
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/mainView.jsp");

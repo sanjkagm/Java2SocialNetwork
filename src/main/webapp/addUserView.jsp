@@ -55,27 +55,27 @@
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" required="" name="username"  value="${user.username}">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="float:left; width: 48%;">
                 <input type="password" class="form-control" placeholder="Password" required="" name="password" value="${user.password}">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="float:right; width: 48%;">
                 <input type="password" class="form-control" placeholder="Repeat password" required="" name="password_repeat">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="float:left; width: 48%;">
                 <input type="text" class="form-control" placeholder="First name" required="" name="firstName" value="${user.firstName}">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="float:right; width: 48%;">
                 <input type="text" class="form-control" placeholder="Last name" required="" name="lastName" value="${user.lastName}">
             </div>
 
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Date of birth" required="" id="datePicker" name="date_of_birth" readonly value="${user.date_of_birth}" style="cursor: pointer">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="float:left; width: 48%;">
                 <input type="text" class="form-control" placeholder="Country" required="" name="country" value="${user.country}">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="float:right; width: 48%;">
                 <input type="text" class="form-control" placeholder="City" required="" name="city" value="${user.city}">
             </div>
 
@@ -95,10 +95,10 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group" style="float:left; width: 48%;">
                 <input type="text" class="form-control" id="age_from" placeholder="Age from" name="age_from" value="${user.age_from}">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="float:right; width: 48%;">
                 <input type="text" class="form-control" id="age_to" placeholder="Age to" name="age_to" value="${user.age_to}">
             </div>
             <div class="form-group">

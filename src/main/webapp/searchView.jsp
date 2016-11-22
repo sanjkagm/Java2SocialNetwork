@@ -13,25 +13,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JAVA2 | Search</title>
-    <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-    <style>
-        .alert-box {
-            background-color: #008cba;
-            border-color: #0078a0;
-            border-style: solid;
-            border-width: 1px;
-            color: #ffffff;
-            display: block;
-            font-size: 0.72222rem;
-            font-weight: normal;
-            margin-bottom: 1.11111rem;
-            padding: 0.77778rem 1.33333rem 0.77778rem 0.77778rem;
-            position: relative;
-            transition: opacity 300ms ease-out 0s;
-        }
-
-    </style>
+    <jsp:include page="_header.jsp"></jsp:include>
 </head>
 <body>
 
@@ -75,7 +57,7 @@
                         <c:forEach items="${usersFound}" var="userFound" >
                             <div class="column" style="text-align: center">
                                 <a href="${pageContext.request.contextPath}/user/${userFound.userId}"><img class="thumbnail" src="${pageContext.request.contextPath}/image/${userFound.username}/avatar.jpg"></a>
-                                <h6><a href="${pageContext.request.contextPath}/user/${userFound.userId}">${userFound.firstName}, ${userFound.lastName}</a></h6>
+                                <h6><i id="dot${userFound.userId}" class="fa fa-circle" aria-hidden="true" style="color:#e6e6e6"></i> <a href="${pageContext.request.contextPath}/user/${userFound.userId}">${userFound.firstName}, ${userFound.lastName}</a></h6>
                                 <h6>${userFound.city}, ${userFound.country}</h6>
                             </div>
 
@@ -121,11 +103,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
-<script>
-    $(document).foundation();
-</script>
+<jsp:include page="_footer.jsp"></jsp:include>
 <script>
     $( document ).ready(function() {
         if ("" != "${searchData.looking_for}")
@@ -135,6 +113,8 @@
         if ($("#age_to").val() == 0 )
             $("#age_to").val("")
 
+
+        <c:forEach items="${online}" var="userOnline"><c:if test="${userOnline.userId > 0}">$("#dot${userOnline.userId}").css('color', 'green');</c:if></c:forEach>
     });
 </script>
 </body>
