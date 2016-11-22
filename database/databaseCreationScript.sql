@@ -45,3 +45,5 @@ INSERT INTO `java2app`.`users`
 
 ALTER TABLE `users` CHANGE `UserID` `UserID` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `FirstName` `FirstName` CHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `LastName` `LastName` CHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `date_of_birth` `date_of_birth` DATE NULL, CHANGE `city` `city` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `country` `country` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `sex` `sex` SET('M','F') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'M', CHANGE `looking_for` `looking_for` SET('M','F') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'F', CHANGE `age_from` `age_from` SMALLINT(6) NULL, CHANGE `age_to` `age_to` SMALLINT(6) NULL, CHANGE `about` `about` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
 ALTER TABLE `users` ADD UNIQUE( `username`);
+
+CREATE TABLE `java2app`.`users_friends` ( `id` INT NOT NULL AUTO_INCREMENT , `user_id` INT NOT NULL , `friend_id` INT NOT NULL , `is_accepted` TINYINT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

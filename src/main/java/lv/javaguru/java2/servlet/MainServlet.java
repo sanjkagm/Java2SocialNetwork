@@ -1,7 +1,9 @@
 package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
-import lv.javaguru.java2.service.EditUserService;
+import lv.javaguru.java2.service.MainService;
+import lv.javaguru.java2.service.SearchService;
+import lv.javaguru.java2.service.Utils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,15 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-/**
- * Created by Pavel on 07.11.2016..
- */
-@WebServlet(urlPatterns = { "/editUser" })
-public class EditUserServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/main" })
+public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public EditUserServlet() {
+    public MainServlet() {
         super();
     }
 
@@ -26,23 +26,29 @@ public class EditUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
-        EditUserService editUserService = new EditUserService();
-        User userInSession = editUserService.checkIfUserLoggedIn(request);
-
+        // Check User has logged on
+        MainService mainService = new MainService();
+        User userInSession = mainService.checkIfUserLoggedIn(request);
+        // Not logged in
         if (userInSession == null) {
+            // Redirect to login page.
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-
         // Store info in request attribute
         request.setAttribute("user", userInSession);
-        request.setAttribute("user_in_edit", userInSession);
+
+        // Found users
+        List<User> usersFound = mainService.getFriends(userInSession.getUserId());
+        if (usersFound.size() == 0)
+            request.setAttribute("errorString", "noFriends");
 
 
+        request.setAttribute("usersFound", usersFound);
 
-        // Logined, forward to /editUserView.jsp
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/editUserView.jsp");
+
+        // Logined, forward to /mainView.jsp
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/mainView.jsp");
         dispatcher.forward(request, response);
 
     }

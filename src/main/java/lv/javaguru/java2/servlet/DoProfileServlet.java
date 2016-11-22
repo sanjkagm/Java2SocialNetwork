@@ -17,13 +17,13 @@ import static lv.javaguru.java2.service.Utils.isEmpty;
 /**
  * Created by Pavel on 07.11.2016..
  */
-@WebServlet(urlPatterns = { "/doEditUser" })
-public class DoEditUserServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/doProfile" })
+public class DoProfileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
 
 
-    public DoEditUserServlet() {
+    public DoProfileServlet() {
         super();
     }
 
@@ -94,7 +94,7 @@ public class DoEditUserServlet extends HttpServlet {
 
         // If error, forward to Edit page.
         if (errorString != null) {
-            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/editUserView.jsp");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/profileView.jsp");
             dispatcher.forward(request, response);
         }
 
@@ -106,7 +106,7 @@ public class DoEditUserServlet extends HttpServlet {
                 editUserService.storeLoggedUserInSession(request,user);
             }
             request.setAttribute("successString", successString);
-            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/editUserView.jsp");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/profileView.jsp");
             dispatcher.forward(request, response);
         }
     }

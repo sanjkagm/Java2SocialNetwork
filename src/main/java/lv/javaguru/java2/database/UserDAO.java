@@ -18,5 +18,14 @@ public interface UserDAO {
     void updatePassword(User user);
 
     List<User> getAll();
+    List<User> search(String city, String country, String looking_for, Integer age_from, Integer age_to, Long myId);
+
+    boolean checkUserFriend(Long myId, Long userId);
+
+    void addFriend(Long myId,Long userId);
+    void removeFriend(Long myId,Long userId);
+
+    List<User> getFriends(Long userId);
+
 
 }

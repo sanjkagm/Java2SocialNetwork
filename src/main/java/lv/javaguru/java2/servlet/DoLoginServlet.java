@@ -51,7 +51,7 @@ public class DoLoginServlet extends HttpServlet {
 
             loginService.storeLoggedUserInSession(request, user);
             loginService.storeUserCookie(response,user);
-            response.sendRedirect(request.getContextPath() + "/userInfo");
+            response.sendRedirect(request.getContextPath() + "/main");
             return;
         }
     }

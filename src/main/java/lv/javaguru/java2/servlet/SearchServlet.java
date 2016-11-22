@@ -1,8 +1,7 @@
 package lv.javaguru.java2.servlet;
 
-
 import lv.javaguru.java2.domain.User;
-import lv.javaguru.java2.service.LoginService;
+import lv.javaguru.java2.service.SearchService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,16 +9,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
-
-@WebServlet(urlPatterns = { "/login"})
-public class LoginServlet extends HttpServlet {
+/**
+ * Created by Pavel on 07.11.2016..
+ */
+@WebServlet(urlPatterns = { "/search" })
+public class SearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public LoginServlet() {
+    public SearchServlet() {
         super();
     }
 
@@ -27,15 +26,21 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        LoginService loginService = new LoginService();
-        User userInSession = loginService.checkIfUserLoggedIn(request);
 
-        if (userInSession != null) {
-            response.sendRedirect("/main");
+        SearchService searchService = new SearchService();
+        User userInSession = searchService.checkIfUserLoggedIn(request);
+
+        if (userInSession == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/loginView.jsp");
+        // Store info in request attribute
+        request.setAttribute("user", userInSession);
+
+
+        // Logined, forward to /editUserView.jsp
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/searchView.jsp");
         dispatcher.forward(request, response);
 
     }

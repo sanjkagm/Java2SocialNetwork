@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -23,13 +24,13 @@
         <div style="width: 240px; z-index:0" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
             <div class="row column">
                 <br>
-                <form name="uploadForm" id="uploadForm" method="POST" action="doEditUser" enctype="multipart/form-data">
+                <form name="uploadForm" id="uploadForm" method="POST" action="doProfile" enctype="multipart/form-data">
                     <input type="hidden" name="uploadForm" value="true">
                     <input type="file" id="avatar" name="avatar" style="display:none;"/>
                     <!--<input type="submit" value="upload" />-->
                 </form>
-                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer; max-width: 215px;">
-                <h5><a href="${pageContext.request.contextPath}/editUser">${user.firstName} ${user.lastName}</a></h5>
+                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg" style="cursor:pointer;">
+                <h5><a href="${pageContext.request.contextPath}/profile">${user.firstName} ${user.lastName}</a></h5>
                 <h6 style="font-size: 0.9rem">${user.country}, ${user.city}</h6>
                 <p>${user.about}</p>
             </div>
@@ -39,7 +40,7 @@
             <div class="title-bar hide-for-large">
                 <div class="title-bar-left">
                     <button class="menu-icon" type="button" data-open="my-info"></button>
-                    <span class="title-bar-title"><a href="${pageContext.request.contextPath}/editUser">${user.firstName} ${user.lastName}</a></span>
+                    <span class="title-bar-title"><a href="${pageContext.request.contextPath}/profile">${user.firstName} ${user.lastName}</a></span>
                 </div>
             </div>
             <div class="callout primary">
@@ -50,18 +51,13 @@
                     <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis. In condimentum facilisis porta.</p>
                 </div>
             </div>
-            <div class="row column" style="margin-top: -1em; max-width:100%;">
-                <ul class="menu">
-                    <li><a href="#">Friends</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="${pageContext.request.contextPath}/">Main</a></li>
-                    <li><a href="#">Search</a></li>
-                </ul>
-            </div>
+
+            <jsp:include page="_menu.jsp"></jsp:include>
+
             <div class="row">
-                <form name="editform" method="POST" action="doEditUser">
+                <form name="editform" method="POST" action="doProfile">
                 <div class="column" style="text-align: center"><span id="error" style="color: red">${errorString}</span><span id="success" style="color: #3eff13">${successString}</span>&nbsp;</div>
-                <div class="column"><h3>Profile</h3></div>
+                <div class="column"><h3>My Profile</h3></div>
                 <input type="hidden" name="UserID" value="${user.userId}" />
                 <div class="medium-6 columns">
 
@@ -109,7 +105,7 @@
 
             <div class="row">
                     <div class="column"><h3>Profile</h3></div>
-                    <form name="editPasswordForm" method="POST" action="doEditUser">
+                    <form name="editPasswordForm" method="POST" action="doProfile">
                         <input type="hidden" name="passwordForm" value="true" />
                         <input type="hidden" name="username" value="${user.username}" />
                         <input type="hidden" name="UserID" value="${user.userId}" />

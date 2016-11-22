@@ -78,18 +78,22 @@
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="City" required="" name="city" value="${user.city}">
             </div>
+
             <div class="form-group">
+                <label style="float:left; width: 50%;">Sex
                 <select class="form-control" id="sex" name="sex" value="${user.sex}">
                     <option value="M">Male</option>
                     <option value="F">Female</option>
                 </select>
+                </label>
+                <label style="float:left; width: 50%;">Looking for
+                    <select class="form-control" id="looking_for" name="looking_for" value="${user.looking_for}">
+                        <option value="F">Female</option>
+                        <option value="M">Male</option>
+                    </select>
+                </label>
             </div>
-            <div class="form-group">
-                <select class="form-control" id="looking_for" name="looking_for" value="${user.looking_for}">
-                    <option value="F">Female</option>
-                    <option value="M">Male</option>
-                </select>
-            </div>
+
 
             <div class="form-group">
                 <input type="text" class="form-control" id="age_from" placeholder="Age from" name="age_from" value="${user.age_from}">
