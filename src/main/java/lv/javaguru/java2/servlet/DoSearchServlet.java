@@ -61,8 +61,11 @@ public class DoSearchServlet extends HttpServlet {
                     "                    No matches.\n" +
                     "                </div>");
 
-        List<User> onlineUsers = (List<User>) request.getServletContext().getAttribute("onlineUsers");
-        request.setAttribute("online", onlineUsers);
+
+        // Temp var storing online users
+        List<User> onlineUsersTemp = new ArrayList<>((List<User>) request.getServletContext().getAttribute("onlineUsers"));
+        onlineUsersTemp.retainAll(usersFound);
+        request.setAttribute("online", onlineUsersTemp);
 
 
         request.setAttribute("usersFound", usersFound);
