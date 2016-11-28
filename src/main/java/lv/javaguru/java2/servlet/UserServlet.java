@@ -1,8 +1,9 @@
 package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.MainService;
 import lv.javaguru.java2.service.UserService;
-
+import java.lang.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(urlPatterns = { "/user/*" })
 public class UserServlet extends HttpServlet {
@@ -51,6 +53,27 @@ public class UserServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
             return;
         }
+
+
+          // get list of : friends of a friend
+
+        MainService friendsOfAFriendObj = new MainService ();
+        List<User>  friendsOfFriend = friendsOfAFriendObj.getFriends(Long.parseLong(userID));
+
+
+        StringBuilder friendOfAFriendString = new StringBuilder();
+
+
+        for (User user  : friendsOfFriend)
+        {
+
+            friendOfAFriendString.append(user.getUsername());
+            friendOfAFriendString.append("\t");
+
+        }
+
+        request.setAttribute("friendsOfFriend",friendOfAFriendString);
+
 
 
         User user = userService.getUserById(userID);

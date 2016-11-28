@@ -71,6 +71,14 @@
                         <label>Country
                             <input type="text" name="country" value="${userFound.country}">
                         </label>
+                        <label>
+                            About
+                            <textarea name="about" style="height: 7.5rem; line-height:1.2">${userFound.about}</textarea>
+                        </label>
+
+
+
+
 
 
 
@@ -90,8 +98,8 @@
                         </label>
 
                         <label>
-                            About
-                            <textarea name="about" style="height: 7.5rem; line-height:1.2">${userFound.about}</textarea>
+                            Friend of:
+                            <textarea name="Friend of:" style="height: 7.5rem; line-height:1.2">${friendsOfFriend}</textarea>
                         </label>
 
                     </div>

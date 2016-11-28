@@ -4,3 +4,5 @@
 #IDEA ignore personal project settings
 .idea/
 *.iml
+pom.xml
+database.properties
