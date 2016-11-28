@@ -12,6 +12,31 @@ import java.util.List;
 
 public class UserDAOImpl extends DAOImpl implements UserDAO {
 
+
+    public Long getIdByUsername(String username) throws DBException {
+        Connection connection = null;
+
+
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT UserID FROM users WHERE username = ?");
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Long id = null;
+            if (resultSet.next()) {
+                id = resultSet.getLong("UserID");
+            }
+            return id;
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserDAOImpl.checkUserFriend()");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
     public void create(User user) throws DBException {
         if (user == null) {
             return;
@@ -38,6 +63,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
             preparedStatement.setInt(11, user.getAge_to());
             preparedStatement.setString(12, user.getAbout());
 
+            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()){
@@ -188,6 +214,19 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
                 user.setUserId(resultSet.getLong("UserID"));
                 user.setFirstName(resultSet.getString("FirstName"));
                 user.setLastName(resultSet.getString("LastName"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                user.setCountry(resultSet.getString("country"));
+                user.setCity(resultSet.getString("city"));
+
+                user.setDate_of_birth(resultSet.getString("date_of_birth"));
+                user.setLooking_for(resultSet.getString("looking_for"));
+
+                user.setAge_from(resultSet.getInt("age_from"));
+                user.setAge_to(resultSet.getInt("age_to"));
+
+                user.setSex(resultSet.getString("sex"));
+                user.setAbout(resultSet.getString("about"));
                 users.add(user);
             }
         } catch (Throwable e) {

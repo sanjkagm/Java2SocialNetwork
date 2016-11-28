@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface UserDAO {
 
+    Long getIdByUsername(String username);
+
     void create(User user);
 
     User getById(Long id);

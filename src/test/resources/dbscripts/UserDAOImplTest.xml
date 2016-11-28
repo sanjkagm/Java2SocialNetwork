@@ -1,4 +1,4 @@
 <dataset>
-    <USERS FirstName="Bob" LastName="Doe"/>
-    <USERS FirstName="Alice" LastName="Foo"/>
+    <USERS username="username" password="password" date_of_birth="1998-10-04" city="city" country="country" sex="M" looking_for="F" age_from="20" age_to="40" about="about" FirstName="Bob" LastName="Doe"/>
+    <USERS_FRIENDS user_id="1" friend_id="2" is_accepted="1"/>
 </dataset>
