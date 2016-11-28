@@ -33,7 +33,7 @@
         function message2(str)
         {
             alert(str);
-            document.registerForm.loginBut.focus();
+            document.getElementById("loginBut").focus();
         }
 
         //-->
@@ -53,41 +53,41 @@
         <p>Create account to see it in action.</p>
         <form class="m-t" role="form" action="doAddUser" method="post" name="registerForm">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Username" required="" name="username"  value="${user.username}">
+                <input type="text" class="form-control" placeholder="Username" required="" name="username"  value="${data.username}">
             </div>
             <div class="form-group" style="float:left; width: 48%;">
-                <input type="password" class="form-control" placeholder="Password" required="" name="password" value="${user.password}">
+                <input type="password" class="form-control" placeholder="Password" required="" name="password" value="${data.password}">
             </div>
             <div class="form-group" style="float:right; width: 48%;">
                 <input type="password" class="form-control" placeholder="Repeat password" required="" name="password_repeat">
             </div>
 
             <div class="form-group" style="float:left; width: 48%;">
-                <input type="text" class="form-control" placeholder="First name" required="" name="firstName" value="${user.firstName}">
+                <input type="text" class="form-control" placeholder="First name" required="" name="firstName" value="${data.firstName}">
             </div>
             <div class="form-group" style="float:right; width: 48%;">
-                <input type="text" class="form-control" placeholder="Last name" required="" name="lastName" value="${user.lastName}">
+                <input type="text" class="form-control" placeholder="Last name" required="" name="lastName" value="${data.lastName}">
             </div>
 
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Date of birth" required="" id="datePicker" name="date_of_birth" readonly value="${user.date_of_birth}" style="cursor: pointer">
+                <input type="text" class="form-control" placeholder="Date of birth" required="" id="datePicker" name="date_of_birth" readonly value="${data.date_of_birth}" style="cursor: pointer">
             </div>
             <div class="form-group" style="float:left; width: 48%;">
-                <input type="text" class="form-control" placeholder="Country" required="" name="country" value="${user.country}">
+                <input type="text" class="form-control" placeholder="Country" required="" name="country" value="${data.country}">
             </div>
             <div class="form-group" style="float:right; width: 48%;">
-                <input type="text" class="form-control" placeholder="City" required="" name="city" value="${user.city}">
+                <input type="text" class="form-control" placeholder="City" required="" name="city" value="${data.city}">
             </div>
 
             <div class="form-group">
                 <label style="float:left; width: 50%;">Sex
-                <select class="form-control" id="sex" name="sex" value="${user.sex}">
+                <select class="form-control" id="sex" name="sex" value="${data.sex}">
                     <option value="M">Male</option>
                     <option value="F">Female</option>
                 </select>
                 </label>
                 <label style="float:left; width: 50%;">Looking for
-                    <select class="form-control" id="looking_for" name="looking_for" value="${user.looking_for}">
+                    <select class="form-control" id="looking_for" name="looking_for" value="${data.looking_for}">
                         <option value="F">Female</option>
                         <option value="M">Male</option>
                     </select>
@@ -96,13 +96,13 @@
 
 
             <div class="form-group" style="float:left; width: 48%;">
-                <input type="text" class="form-control" id="age_from" placeholder="Age from" name="age_from" value="${user.age_from}">
+                <input type="text" class="form-control" id="age_from" placeholder="Age from" name="age_from" value="${data.age_from}">
             </div>
             <div class="form-group" style="float:right; width: 48%;">
-                <input type="text" class="form-control" id="age_to" placeholder="Age to" name="age_to" value="${user.age_to}">
+                <input type="text" class="form-control" id="age_to" placeholder="Age to" name="age_to" value="${data.age_to}">
             </div>
             <div class="form-group">
-                <textarea class="form-control" placeholder="About" name="about" value="${user.about}"></textarea>
+                <textarea class="form-control" placeholder="About" name="about" value="${data.about}"></textarea>
             </div>
 
             <div class="form-group">
@@ -111,7 +111,7 @@
             <button type="submit" class="btn btn-primary block full-width m-b" >Register</button>
 
             <p class="text-muted text-center"><small>Already have an account?</small></p>
-            <a class="btn btn-sm btn-white btn-block" href="${pageContext.request.contextPath}/login" name="loginBut">Login</a>
+            <a class="btn btn-sm btn-white btn-block" href="${pageContext.request.contextPath}/login" name="loginBut" id="loginBut">Login</a>
         </form>
         <p class="m-t"> <small>All rights reserved to Java2 development team &copy; 2016</small> </p>
     </div>
@@ -140,10 +140,10 @@
         });
 
 
-        if ("" != "${user.sex}")
-            $("#sex").val("${user.sex}");
-        if ("" != "${user.looking_for}")
-            $("#looking_for").val("${user.looking_for}");
+        if ("" != "${data.sex}")
+            $("#sex").val("${data.sex}");
+        if ("" != "${data.looking_for}")
+            $("#looking_for").val("${data.looking_for}");
 
         if ($("#age_from").val() == 0 )
             $("#age_from").val("")
@@ -151,10 +151,10 @@
             $("#age_to").val("")
 
 
-        if ("" != `${errorString}`)
-            message1(`${errorString}`);
-        if ("" != `${successString}`)
-            message2(`${successString}`);
+        if ("" != `${messages[0]}`)
+            message1(`${messages[0]}`);
+        if ("" != `${messages[1]}`)
+            message2(`${messages[1]}`);
 
 
     });

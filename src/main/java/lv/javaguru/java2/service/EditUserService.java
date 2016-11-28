@@ -59,7 +59,8 @@ public class EditUserService extends Utils {
         if (errorString == null) {
             try {
                 UserDAO userDAOObj = new UserDAOImpl();
-                User user = createUser().withUserId(stringToLong(userIdStr)).withUsername(username).withFirstName(firstName).withLastName(lastName).withCity(city).withCountry(country).withLooking_for(looking_for).withAge_from(stringToInteger(age_fromStr)).withAge_to(stringToInteger(age_toStr)).withAbout(about).withSex(sex).withDate_of_birth(date_of_birth).build();
+                //User user = createUser().withUserId(stringToLong(userIdStr)).withUsername(username).withFirstName(firstName).withLastName(lastName).withCity(city).withCountry(country).withLooking_for(looking_for).withAge_from(stringToInteger(age_fromStr)).withAge_to(stringToInteger(age_toStr)).withAbout(about).withSex(sex).withDate_of_birth(date_of_birth).build();
+                User user = createUserByBuilder(userIdStr, username, "", date_of_birth, firstName, lastName, sex, city, country, looking_for, age_fromStr, age_toStr, about);
                 userDAOObj.update(user);
                 //System.out.println(username);
             } catch (DBException e) {

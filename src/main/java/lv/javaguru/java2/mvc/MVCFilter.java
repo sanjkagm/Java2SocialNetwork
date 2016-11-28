@@ -4,21 +4,18 @@ package lv.javaguru.java2.mvc;
 
 import lv.javaguru.java2.servlet.AddUserController;
 import lv.javaguru.java2.servlet.DoAddUserController;
-import lv.javaguru.java2.servlet.DoLoginController;
-import lv.javaguru.java2.servlet.LoginController;
-
+import lv.javaguru.java2.servlet.*;
 
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebFilter(filterName = "MVCFilter", urlPatterns = { "/addUser","/doAddUser" })
+@WebFilter(filterName = "MVCFilter", urlPatterns = { "/addUser","/doAddUser", "/main" })
 public class MVCFilter implements Filter {
 
     private Map<String, MVCController> controllers;
@@ -28,8 +25,8 @@ public class MVCFilter implements Filter {
         controllers = new HashMap<>();
         controllers.put("/addUser", new AddUserController());
         controllers.put("/doAddUser", new DoAddUserController());
-        controllers.put("/loginView", new DoLoginController());
-        controllers.put("/main", new LoginController());
+       // controllers.put("/loginView", new DoLoginController());
+        controllers.put("/main", new MainController());
     }
 
     @Override

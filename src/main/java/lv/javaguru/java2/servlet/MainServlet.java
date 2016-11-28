@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(urlPatterns = { "/main" })
@@ -45,10 +46,10 @@ public class MainServlet extends HttpServlet {
         request.setAttribute("usersFound", usersFound);
 
 
-        List<User> onlineUsers = (List<User>) request.getServletContext().getAttribute("onlineUsers");
-        request.setAttribute("online", onlineUsers);
-
-        //System.out.println(onlineUsers.size());
+        // Temp var storing online users
+        List<User> onlineUsersTemp = new ArrayList<>((List<User>) request.getServletContext().getAttribute("onlineUsers"));
+        onlineUsersTemp.retainAll(usersFound);
+        request.setAttribute("online", onlineUsersTemp);
 
         // Logined, forward to /mainView.jsp
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/mainView.jsp");
