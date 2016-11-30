@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static lv.javaguru.java2.domain.UserBuilder.createUser;
+import lv.javaguru.java2.domain.UserBuilder;
+import lv.javaguru.java2.domain.UserMessage;
+import lv.javaguru.java2.domain.UserMessageBuilder;
 
 /**
  * Created by Pavel on 15.11.2016..
@@ -69,6 +72,26 @@ public class Utils {
         return Lng;
     }
 
+    public UserMessage createUserMessageByBuilder (String idStr,
+                                                   String sender,
+                                                   String recipient,
+                                                   String text,
+                                                   Date created,
+                                                   Boolean isRead)
+
+    {
+
+        long id = stringToLong(idStr);
+
+        return UserMessageBuilder.createUserMessage()
+                .withMsgId(id)
+                .withSender(sender)
+                .withRecipient(recipient)
+                .withText(text)
+                .withCreated(created)
+                .withIsRead(isRead).build();
+    }
+
     public User createUserByBuilder (String userIdStr,
                                      String username,
                                      String password,
@@ -88,7 +111,8 @@ public class Utils {
         int age_to = stringToInteger(age_toStr);
         long userId = stringToLong(userIdStr);
 
-        return createUser()
+
+        return UserBuilder.createUser()
                 .withUserId(userId)
                 .withUsername(username)
                 .withPassword(password)

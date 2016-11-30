@@ -12,7 +12,7 @@
             <a class="button">&nbsp;</a>
         <% } %>
 
-        <a class="button">&nbsp;</a>
+        <a class="button" href="${pageContext.request.contextPath}/messages">Messages</a>
 
         <% if (request.getServletPath().contains("main")) { %>
             <a class="button" href="${pageContext.request.contextPath}/profile">Edit Profile</a>

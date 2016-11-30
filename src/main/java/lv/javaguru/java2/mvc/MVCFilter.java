@@ -2,19 +2,21 @@ package lv.javaguru.java2.mvc;
 
 
 
+import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.Utils;
 import lv.javaguru.java2.servlet.AddUserController;
 import lv.javaguru.java2.servlet.DoAddUserController;
+import lv.javaguru.java2.servlet.MessagesController;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebFilter(filterName = "MVCFilter", urlPatterns = { "/addUser","/doAddUser" })
+@WebFilter(filterName = "MVCFilter", urlPatterns = { "/addUser","/doAddUser","/messages/*" })
 public class MVCFilter implements Filter {
 
     private Map<String, MVCController> controllers;
@@ -24,6 +26,7 @@ public class MVCFilter implements Filter {
         controllers = new HashMap<>();
         controllers.put("/addUser", new AddUserController());
         controllers.put("/doAddUser", new DoAddUserController());
+        controllers.put("/messages", new MessagesController());
     }
 
     @Override
@@ -38,6 +41,18 @@ public class MVCFilter implements Filter {
         if (contextURI.contains("/css")) {
             filterChain.doFilter(request, response);
         } else {
+
+            if (contextURI.contains("/messages")) {
+                Utils utils = new Utils();
+                User userInSession = utils.checkIfUserLoggedIn(req);
+
+                if (userInSession == null) {
+                    resp.sendRedirect(req.getContextPath() + "/login");
+                    return;
+                }
+            }
+
+
             MVCController controller = controllers.get(contextURI);
             MVCModel model;
             if (method.equalsIgnoreCase("GET")){

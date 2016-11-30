@@ -1,24 +1,15 @@
 package lv.javaguru.java2.servlet;
 
 
-import lv.javaguru.java2.database.UserDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
+
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.mvc.MVCController;
 import lv.javaguru.java2.mvc.MVCModel;
 import lv.javaguru.java2.service.AddUserService;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+
 
 
 /**

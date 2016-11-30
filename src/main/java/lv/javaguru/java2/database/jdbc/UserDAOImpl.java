@@ -63,7 +63,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
             preparedStatement.setInt(11, user.getAge_to());
             preparedStatement.setString(12, user.getAbout());
 
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()){
@@ -282,7 +282,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
             preparedStatement.setString(8, user.getAbout());
 
             preparedStatement.setLong(9, user.getUserId());
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (Throwable e) {
             System.out.println("Exception while execute UserDAOImpl.update()");
@@ -308,7 +308,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
 
             preparedStatement.setLong(2, user.getUserId());
 
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (Throwable e) {
             System.out.println("Exception while execute UserDAOImpl.updatePassword()");
@@ -338,7 +338,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
 
             preparedStatement.setLong(6, myId);
 
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

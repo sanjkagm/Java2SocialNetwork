@@ -1,5 +1,7 @@
 package lv.javaguru.java2.database.jdbc;
 
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.ext.mssql.MsSqlDataTypeFactory;
 import org.junit.Before;
 
 public abstract class DBUnitTestCase {
@@ -13,5 +15,7 @@ public abstract class DBUnitTestCase {
     }
 
     protected abstract String getDatabaseFile();
+
+
 
 }

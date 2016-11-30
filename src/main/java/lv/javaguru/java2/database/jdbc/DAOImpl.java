@@ -2,6 +2,7 @@ package lv.javaguru.java2.database.jdbc;
 
 import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.domain.User;
+import org.dbunit.database.DatabaseConfig;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,8 @@ public class DAOImpl {
         try {
             properties.load(DAOImpl.class.getClassLoader().getResourceAsStream(DB_CONFIG_FILE));
 
+
+
             jdbcUrl = properties.getProperty("jdbcUrl");
             driverClass = properties.getProperty("driverClass");
             userName = properties.getProperty("userName");
@@ -54,6 +57,7 @@ public class DAOImpl {
 
     protected Connection getConnection() throws DBException {
         try{
+
             return DriverManager.getConnection(jdbcUrl, userName, password);
         } catch (SQLException e) {
             System.out.println("Exception while getting connection to database");
