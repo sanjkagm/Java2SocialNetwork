@@ -23,6 +23,10 @@ public interface UserDAO {
     List<User> search(String city, String country, String looking_for, Integer age_from, Integer age_to, Long myId);
 
     boolean checkUserFriend(Long myId, Long userId);
+    boolean checkUserPending(Long myId, Long userId);
+
+    Long addFriendRequest(Long myId,Long userId);
+    int acceptFriendRequest(Long myId,Long userId);
 
     void addFriend(Long myId,Long userId);
     void removeFriend(Long myId,Long userId);

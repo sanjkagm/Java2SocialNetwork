@@ -17,6 +17,12 @@ public class MessagesService extends Utils{
         UserMessageDAO userMessageDAOObj = new UserMessageDAOImpl();
         List<UserMessage> userMessages = userMessageDAOObj.getMessagesToUserByUsername(username);
 
+
         return userMessages;
+    }
+
+    public void deleteMsg (String msgId) {
+        UserMessageDAO userMessageDAOObj = new UserMessageDAOImpl();
+        userMessageDAOObj.delete(stringToLong(msgId));
     }
 }

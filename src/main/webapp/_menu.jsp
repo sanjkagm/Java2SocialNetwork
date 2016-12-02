@@ -5,8 +5,10 @@
         <% if (request.getServletPath().contains("/user")) { %>
             <% if ((boolean)session.getAttribute("isFriend")) { %>
                 <a id="friendLink" class="button" action="remove"><i class="fa fa-minus-circle" aria-hidden="true"></i> Remove friend</a>
+            <% } else if ((boolean)session.getAttribute("isPending")) { %>
+                <a id="friendLink" class="button" action="cancel"><i class="fa fa-minus-circle" aria-hidden="true"></i> Cancel invitation</a>
             <% } else { %>
-                <a id="friendLink" class="button" action="add"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add friend</a>
+                <a id="friendLink" class="button" action="add"><i class="fa fa-plus-circle" aria-hidden="true"></i> Send request</a>
             <% } %>
         <% } else { %>
             <a class="button">&nbsp;</a>
@@ -24,5 +26,7 @@
 
     </div>
 
+    <div id="alertMessage2" class="alert-box success radius" data-alert="" style=display:none;"></div>
     <div id="alertMessage" class="alert-box" data-alert="" style=display:none;"></div>
+
 </div>

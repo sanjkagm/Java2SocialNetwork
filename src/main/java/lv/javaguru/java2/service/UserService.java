@@ -21,4 +21,9 @@ public class UserService extends Utils{
         UserDAO userDAOObj = new UserDAOImpl();
         return userDAOObj.checkUserFriend(myId,stringToLong(userId));
     }
+
+    public Boolean checkUserPending (Long myId, String userId) {
+        UserDAO userDAOObj = new UserDAOImpl();
+        return userDAOObj.checkUserPending(myId,stringToLong(userId));
+    }
 }

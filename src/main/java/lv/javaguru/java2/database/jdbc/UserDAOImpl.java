@@ -376,7 +376,33 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
         try {
             connection = getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select id from users_friends where (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?) LIMIT 1");
+                    .prepareStatement("select id from users_friends where (user_id = ? AND friend_id = ? AND is_accepted = 1) OR (friend_id = ? AND user_id = ? AND is_accepted = 1) LIMIT 1");
+            preparedStatement.setLong(1, myId);
+            preparedStatement.setLong(2, userId);
+            preparedStatement.setLong(3, myId);
+            preparedStatement.setLong(4, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Boolean isFriend = false;
+            if (resultSet.next()) {
+                isFriend = true;
+            }
+            return isFriend;
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserDAOImpl.checkUserFriend()");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+    public boolean checkUserPending(Long myId, Long userId) throws DBException {
+        Connection connection = null;
+
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select id from users_friends where (user_id = ? AND friend_id = ? AND is_accepted = 0) OR (friend_id = ? AND user_id = ? AND is_accepted = 0) LIMIT 1");
             preparedStatement.setLong(1, myId);
             preparedStatement.setLong(2, userId);
             preparedStatement.setLong(3, myId);
@@ -414,6 +440,53 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
         }
     }
 
+    public Long addFriendRequest(Long myId, Long userId) {
+
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("insert into users_friends values (default, ?, ?, 0)", PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setLong(1, myId);
+            preparedStatement.setLong(2, userId);
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next()){
+                return rs.getLong(1);
+            }
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserDAOImpl.addFriendRequest()");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+        return null;
+    }
+    public int acceptFriendRequest(Long myId, Long userId) {
+        Connection connection = null;
+        Integer result = null;
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("update USERS_FRIENDS set is_accepted = 1 where user_id = ? and friend_id = ?");
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setLong(2, myId);
+
+            System.out.println(preparedStatement);
+            result = preparedStatement.executeUpdate();
+            return result;
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserDAOImpl.acceptFriendRequest()");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+
     public void removeFriend(Long myId, Long userId) throws DBException {
         Connection connection = null;
         try {
@@ -440,7 +513,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
         Connection connection = null;
         try {
             connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from USERS where UserID IN (SELECT friend_id FROM users_friends WHERE user_id = ?) OR UserID IN (SELECT user_id FROM users_friends WHERE friend_id = ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from USERS where UserID IN (SELECT friend_id FROM users_friends WHERE user_id = ? AND is_accepted = 1) OR UserID IN (SELECT user_id FROM users_friends WHERE friend_id = ? AND is_accepted = 1)");
             preparedStatement.setLong(1, myId);
             preparedStatement.setLong(2, myId);
             ResultSet resultSet = preparedStatement.executeQuery();

@@ -54,15 +54,21 @@ public class UserServlet extends HttpServlet {
 
 
         User user = userService.getUserById(userID);
-        Boolean isFriend = userService.checkUserFriend(userInSession.getUserId(), userID);
+
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
             return;
         }
+
+        Boolean isFriend = userService.checkUserFriend(userInSession.getUserId(), userID);
+        Boolean isPending = userService.checkUserPending(userInSession.getUserId(), userID);
+
+
         // Store info in request attribute
         request.setAttribute("userFound", user);
         request.setAttribute("isFriend",isFriend);
         request.getSession().setAttribute("isFriend", isFriend);
+        request.getSession().setAttribute("isPending", isPending);
 
         // Logined, forward to /userView.jsp
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/userView.jsp");

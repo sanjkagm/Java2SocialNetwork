@@ -4,6 +4,6 @@
     <title>JSP page</title>
 </head>
 <body>
-<h1>${requestScope.data}</h1>
+<h1>${requestScope.messages[0]}</h1>
 </body>
 </html>

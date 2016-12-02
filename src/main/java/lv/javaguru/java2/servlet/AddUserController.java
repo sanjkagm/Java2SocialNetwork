@@ -44,7 +44,7 @@ public class AddUserController /*extends HttpServlet*/ implements MVCController 
 
         String view;
         Object data = null;
-        String messages = null;
+        String[] messages = new String[2];
 
 
         try {
@@ -52,7 +52,7 @@ public class AddUserController /*extends HttpServlet*/ implements MVCController 
         } catch (Exception exception) {
             view = "/error.jsp";
             data = null;
-            messages = "Error";
+            messages[0] = "Error";
         }
 
         return new MVCModel(view,data,messages);

@@ -23,7 +23,7 @@ public class UserMessageDAOImpl extends DAOImpl implements UserMessageDAO {
         try {
             connection = getConnection();
             PreparedStatement preparedStatement;
-            preparedStatement = connection.prepareStatement("SELECT * FROM messages WHERE recipient = ? ORDER BY is_read");
+            preparedStatement = connection.prepareStatement("SELECT * FROM messages WHERE recipient = ? ORDER BY created DESC");
 
             preparedStatement.setString(1, username);
             System.out.println(preparedStatement);
@@ -36,7 +36,7 @@ public class UserMessageDAOImpl extends DAOImpl implements UserMessageDAO {
                 userMessage.setSender(resultSet.getString("sender"));
                 userMessage.setRecipient(resultSet.getString("recipient"));
                 userMessage.setText(resultSet.getString("text"));
-                userMessage.setCreated(resultSet.getDate("created"));
+                userMessage.setCreated(resultSet.getTimestamp("created"));
                 userMessage.setIsRead(resultSet.getBoolean("is_read"));
 
 

@@ -79,7 +79,24 @@
             $("#alertMessage").html("You have no friends :(");
             $("#alertMessage").show();
         }
+        if ("" != "${successString}") {
+            if ("already" == "${successString}") {
+                $("#alertMessage2").removeClass();
+                $("#alertMessage2").addClass("alert-box warning round");
+                $("#alertMessage2").html("You are already friends!");
+            } else if ("expired" == "${successString}") {
+                $("#alertMessage2").removeClass();
+                $("#alertMessage2").addClass("alert-box warning round");
+                $("#alertMessage2").html("Invitation expired!");
+            } else if ("accepted" == "${successString}") {
+                $("#alertMessage2").removeClass();
+                $("#alertMessage2").addClass("alert-box success radius");
+                $("#alertMessage2").html("Invitation accepted!");
 
+            }
+            $("#alertMessage2").show();
+        }
+        <% session.setAttribute("successString",""); %>
         <c:forEach items="${online}" var="userOnline"><c:if test="${userOnline.userId > 0}">$("#dot${userOnline.userId}").css('color', 'green');</c:if></c:forEach>
 
     });

@@ -27,6 +27,7 @@ public class MVCFilter implements Filter {
         controllers.put("/addUser", new AddUserController());
         controllers.put("/doAddUser", new DoAddUserController());
         controllers.put("/messages", new MessagesController());
+        controllers.put("/messages/", new MessagesController());
     }
 
     @Override
@@ -54,6 +55,9 @@ public class MVCFilter implements Filter {
 
 
             MVCController controller = controllers.get(contextURI);
+            if (contextURI.contains("/messages/")) {
+                controller = controllers.get("/messages/");
+            }
             MVCModel model;
             if (method.equalsIgnoreCase("GET")){
                 model = controller.processGet(req);

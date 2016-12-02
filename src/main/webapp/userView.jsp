@@ -123,14 +123,16 @@
 
         var confirmMessage = "Are you sure?";
 
-        $("[action='add'],[action='remove']").on('click', function (e) {
+        $("[action='add'],[action='remove'],[action='cancel']").on('click', function (e) {
             e.preventDefault();
             //$("#alertMessage").hide();
 
             if ($("#friendLink").attr("action")=='add')
-                var confirmMsg = 'Add ${userFound.firstName} ${userFound.lastName} to friends?';
-            else
-                var confirmMsg = 'Remove ${userFound.firstName} ${userFound.lastName} from friends?';
+                var confirmMsg = 'Send request to ${userFound.firstName} ${userFound.lastName} ?';
+            else if ($("#friendLink").attr("action")=='remove')
+                var confirmMsg = 'Remove ${userFound.firstName} ${userFound.lastName} from friends ?';
+            else if ($("#friendLink").attr("action")=='cancel')
+                var confirmMsg = 'Cancel invitation ?';
             $.confirm({
                 title: 'Confirm!',
                 content: confirmMsg,
@@ -155,16 +157,21 @@
                         success: function(data, textStatus, jqXHR)
                         {
                             if (data == 'true') {
-                                $("#alertMessage").html("You are now friends with ${userFound.firstName} ${userFound.lastName}");
+                                $("#alertMessage").html("Invitation sent to ${userFound.firstName} ${userFound.lastName}");
                                 $("#alertMessage").show();
-                                $("#friendLink").attr("action","remove");
-                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Remove friend");
+                                $("#friendLink").attr("action","cancel");
+                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Cancel invitation");
+                            } else if ($("#friendLink").attr("action")=='cancel') {
+                                $("#alertMessage").html("Invitation cancelled.");
+                                $("#alertMessage").show();
+                                $("#friendLink").attr("action","add");
+                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Send request");
                             }
                             else if (data == 'false') {
                                 $("#alertMessage").html("${userFound.firstName} ${userFound.lastName} was just removed from your friends.");
                                 $("#alertMessage").show();
                                 $("#friendLink").attr("action","add");
-                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Add friend");
+                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Send request");
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown)
