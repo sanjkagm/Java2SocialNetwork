@@ -54,26 +54,21 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
+        // get list of : friends of a friend
+        // and friends of  user in session   to compare them
 
-          // get list of : friends of a friend
+        MainService friendsOfUserInSessionObj = new MainService ();
+        List<User> friendsOfUserInSession = friendsOfUserInSessionObj.getFriends(userInSession.getUserId());
 
         MainService friendsOfAFriendObj = new MainService ();
         List<User>  friendsOfFriend = friendsOfAFriendObj.getFriends(Long.parseLong(userID));
 
 
-        StringBuilder friendOfAFriendString = new StringBuilder();
 
+        request.setAttribute("friendsOfUserInSession",friendsOfUserInSession);
+        request.setAttribute("friendsOfFriend",friendsOfFriend);
 
-        for (User user  : friendsOfFriend)
-        {
-
-            friendOfAFriendString.append(user.getUsername());
-            friendOfAFriendString.append("\t");
-
-        }
-
-        request.setAttribute("friendsOfFriend",friendOfAFriendString);
-
+        request.setAttribute("userService", userService);
 
 
         User user = userService.getUserById(userID);
@@ -82,10 +77,16 @@ public class UserServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
             return;
         }
+
+
+        Boolean isPending = userService.checkUserPending(userInSession.getUserId(), userID);
+
+
         // Store info in request attribute
         request.setAttribute("userFound", user);
         request.setAttribute("isFriend",isFriend);
         request.getSession().setAttribute("isFriend", isFriend);
+        request.getSession().setAttribute("isPending", isPending);
 
         // Logined, forward to /userView.jsp
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/userView.jsp");
@@ -96,7 +97,11 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+
+
+
+
+    doGet(request, response);
     }
 
 }

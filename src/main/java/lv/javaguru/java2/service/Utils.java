@@ -1,7 +1,9 @@
 package lv.javaguru.java2.service;
 
 import lv.javaguru.java2.database.UserDAO;
+import lv.javaguru.java2.database.UserMessageDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
+import lv.javaguru.java2.database.jdbc.UserMessageDAOImpl;
 import lv.javaguru.java2.domain.User;
 
 import javax.servlet.http.Cookie;
@@ -10,9 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static lv.javaguru.java2.domain.UserBuilder.createUser;
+import lv.javaguru.java2.domain.UserBuilder;
+import lv.javaguru.java2.domain.UserMessage;
+import lv.javaguru.java2.domain.UserMessageBuilder;
 
 /**
  * Created by Pavel on 15.11.2016..
@@ -69,6 +74,26 @@ public class Utils {
         return Lng;
     }
 
+    public UserMessage createUserMessageByBuilder (String idStr,
+                                                   String sender,
+                                                   String recipient,
+                                                   String text,
+                                                   Date created,
+                                                   Boolean isRead)
+
+    {
+
+        long id = stringToLong(idStr);
+
+        return UserMessageBuilder.createUserMessage()
+                .withMsgId(id)
+                .withSender(sender)
+                .withRecipient(recipient)
+                .withText(text)
+                .withCreated(created)
+                .withIsRead(isRead).build();
+    }
+
     public User createUserByBuilder (String userIdStr,
                                      String username,
                                      String password,
@@ -88,7 +113,8 @@ public class Utils {
         int age_to = stringToInteger(age_toStr);
         long userId = stringToLong(userIdStr);
 
-        return createUser()
+
+        return UserBuilder.createUser()
                 .withUserId(userId)
                 .withUsername(username)
                 .withPassword(password)
@@ -133,7 +159,27 @@ public class Utils {
     public void storeLoginedUser(HttpSession session, User loginedUser) {
         // On the JSP can access ${loginedUser}
         session.setAttribute("loginedUser", loginedUser);
+    }
 
+    public boolean sendMessage(Long myId, Long userId, String type) {
+
+        UserDAO userDAOObj = new UserDAOImpl();
+        UserMessageDAO userMessageObj = new UserMessageDAOImpl();
+        Utils utils = new Utils();
+        User sender = userDAOObj.getById(myId);
+        User recipient = userDAOObj.getById(userId);
+        UserMessage friendRequest = null;
+        if (type.equals("remove")) {
+            friendRequest =
+                    utils.createUserMessageByBuilder("0", sender.getUsername(), recipient.getUsername(),
+                            "Unfriend notification from " + sender.getUsername(), new Date(), false);
+        } else if (type.equals("cancel")) {
+            friendRequest =
+                    utils.createUserMessageByBuilder("0", sender.getUsername(), recipient.getUsername(),
+                            "Invitation cancelled by " + sender.getUsername() + ".", new Date(), false);
+        }
+        userMessageObj.create(friendRequest);
+        return true;
 
     }
 

@@ -48,4 +48,4 @@ ALTER TABLE `users` ADD UNIQUE( `username`);
 
 CREATE TABLE `users_friends` ( `id` INT NOT NULL AUTO_INCREMENT , `user_id` INT NOT NULL , `friend_id` INT NOT NULL , `is_accepted` TINYINT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
-CREATE TABLE `messages` ( `id` INT NOT NULL AUTO_INCREMENT , `sender_id` INT NOT NULL , `recipient_id` INT NOT NULL , `text` VARCHAR(800) NOT NULL , `is_read` TINYINT NOT NULL , `created` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `messages` ( `id` INT NOT NULL AUTO_INCREMENT , `sender` VARCHAR(50) NOT NULL , `recipient` VARCHAR(50) NOT NULL , `text` VARCHAR(800) NOT NULL , `is_read` BOOLEAN NOT NULL , `created` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

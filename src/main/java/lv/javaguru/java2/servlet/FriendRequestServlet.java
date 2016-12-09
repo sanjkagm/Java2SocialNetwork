@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(urlPatterns = { "/friend/*" })
+@WebServlet(urlPatterns = { "/friend/*"})
 public class FriendRequestServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -50,25 +50,37 @@ public class FriendRequestServlet extends HttpServlet {
             action = pathParts[1]; //
         }
         // Check if 'action' is actually supplied to the request URI.
-        if (action == null || (!action.equals("add") && !action.equals("remove"))) {
+        if (action == null || (!action.equals("add") && !action.equals("remove")&& !action.equals("cancel") && !action.equals("accept")) ) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
             return;
         }
 
-        if (!friendService.stringToLong(userId).equals(userInSession.getUserId())) {
-            // Detect possible intruder.
-            return;
-        }
+
 
         boolean isFriend = false;
         if (action.equals("add")) {
+            detectIntruder(friendService.stringToLong(userId),userInSession.getUserId(), response);
+
             isFriend = friendService.addFriend(userId,friendId);
             request.getSession().setAttribute("isFriend", isFriend);
 
         }
-        else if (action.equals("remove")) {
+        else if (action.equals("remove") || action.equals("cancel")) {
+            detectIntruder(friendService.stringToLong(userId),userInSession.getUserId(), response);
+
             isFriend = friendService.removeFriend(userId,friendId);
             request.getSession().setAttribute("isFriend", isFriend);
+
+        }
+        else if (action.equals("accept")) {
+            if (pathParts.length <= 2) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
+                return;
+            }
+            System.out.println(pathParts.length + " " + pathParts[2] + " " + pathParts[3]);
+            request.getSession().setAttribute("successString", friendService.acceptFriendRequest(userInSession.getUserId(),pathParts[2]));
+            response.sendRedirect("/main");
+            return;
 
         }
 
@@ -87,5 +99,14 @@ public class FriendRequestServlet extends HttpServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
+
+    public boolean detectIntruder (Long userId, Long myId, HttpServletResponse response) throws ServletException, IOException {
+        if (!userId.equals(myId)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
+
+        }
+        return false;
+    }
+
 
 }

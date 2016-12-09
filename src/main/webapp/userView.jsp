@@ -5,8 +5,13 @@
   Time: 19:20
   To change this template use File | Settings | File Templates.
 --%>
+
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="lv.javaguru.java2.service.UserService"%>
+
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -97,10 +102,24 @@
                             <input id="age_to" type="text" name="age_to" value="${userFound.age_to}">
                         </label>
 
-                        <label>
-                            Friend of:
-                            <textarea name="Friend of:" style="height: 7.5rem; line-height:1.2">${friendsOfFriend}</textarea>
-                        </label>
+                        Friend of: </br>
+                                    <c:forEach items="${friendsOfFriend}" var="friends">
+                            <tr>
+                                    <c:choose>
+
+                                         <c:when test="${(friends.getUserId()) eq (user.getUserId())}">
+                                          <a class="button" style="background-color:#0000F9" href="${pageContext.request.contextPath}/user/${friends.getUserId()}">${friends.getUsername()}</a>
+                                         </c:when>
+                                           <c:when test="${  friendsOfUserInSession.contains(friends) eq true}">
+                                           <a class="button" style="background-color:#3FB8AF" href="${pageContext.request.contextPath}/user/${friends.getUserId()}">${friends.getUsername()}</a>
+                                           </c:when>
+                                         <c:otherwise>
+                                         <a class="button" style="background-color:#8B91A0" href="${pageContext.request.contextPath}/user/${friends.getUserId()}">${friends.getUsername()}</a>
+                                         </c:otherwise>
+                                     </c:choose>
+                            </tr>
+
+                        </c:forEach>
 
                     </div>
 
@@ -131,14 +150,16 @@
 
         var confirmMessage = "Are you sure?";
 
-        $("[action='add'],[action='remove']").on('click', function (e) {
+        $("[action='add'],[action='remove'],[action='cancel']").on('click', function (e) {
             e.preventDefault();
             //$("#alertMessage").hide();
 
             if ($("#friendLink").attr("action")=='add')
-                var confirmMsg = 'Add ${userFound.firstName} ${userFound.lastName} to friends?';
-            else
-                var confirmMsg = 'Remove ${userFound.firstName} ${userFound.lastName} from friends?';
+                var confirmMsg = 'Send request to ${userFound.firstName} ${userFound.lastName} ?';
+            else if ($("#friendLink").attr("action")=='remove')
+                var confirmMsg = 'Remove ${userFound.firstName} ${userFound.lastName} from friends ?';
+            else if ($("#friendLink").attr("action")=='cancel')
+                var confirmMsg = 'Cancel invitation ?';
             $.confirm({
                 title: 'Confirm!',
                 content: confirmMsg,
@@ -163,16 +184,21 @@
                         success: function(data, textStatus, jqXHR)
                         {
                             if (data == 'true') {
-                                $("#alertMessage").html("You are now friends with ${userFound.firstName} ${userFound.lastName}");
+                                $("#alertMessage").html("Invitation sent to ${userFound.firstName} ${userFound.lastName}");
                                 $("#alertMessage").show();
-                                $("#friendLink").attr("action","remove");
-                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Remove friend");
+                                $("#friendLink").attr("action","cancel");
+                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Cancel invitation");
+                            } else if ($("#friendLink").attr("action")=='cancel') {
+                                $("#alertMessage").html("Invitation cancelled.");
+                                $("#alertMessage").show();
+                                $("#friendLink").attr("action","add");
+                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Send request");
                             }
                             else if (data == 'false') {
                                 $("#alertMessage").html("${userFound.firstName} ${userFound.lastName} was just removed from your friends.");
                                 $("#alertMessage").show();
                                 $("#friendLink").attr("action","add");
-                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Add friend");
+                                $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Send request");
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown)

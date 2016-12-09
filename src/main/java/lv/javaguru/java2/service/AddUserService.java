@@ -4,15 +4,18 @@ import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 /**
  * Created by Pavel on 15.11.2016..
  */
+@Component
 public class AddUserService extends Utils {
 
-
+    @Autowired
+    private UserDAO userDAO;
 
     public String validateInput(String username,
                                 String password,
@@ -61,9 +64,9 @@ public class AddUserService extends Utils {
 
         if (errorString == null) {
             try {
-                UserDAO userDAOObj = new UserDAOImpl();
+               // UserDAO userDAOObj = new UserDAOImpl();
                 User user = createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
-                userDAOObj.create(user);
+                userDAO.create(user);
             } catch (DBException e) {
                 e.printStackTrace();
                 if (e.getMessage().toLowerCase().contains("duplicate entry")) {

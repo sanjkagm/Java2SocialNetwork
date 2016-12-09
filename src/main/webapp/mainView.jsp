@@ -23,10 +23,10 @@
         <div style="width: 240px; z-index:0;height:100%" class="off-canvas position-left reveal-for-large" id="my-info" data-off-canvas data-position="left">
             <div class="row column">
                 <br>
-                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${data.username}/avatar.jpg" id="avatarImg">
-                <h5><a href="${pageContext.request.contextPath}/profile">${data.firstName} ${data.lastName}</a></h5>
-                <h6 style="font-size: 0.9rem">${data.country}, ${data.city}</h6>
-                <p>${data.about}</p>
+                <img class="thumbnail" src="${pageContext.request.contextPath}/image/${user.username}/avatar.jpg" id="avatarImg">
+                <h5><a href="${pageContext.request.contextPath}/profile">${user.firstName} ${user.lastName}</a></h5>
+                <h6 style="font-size: 0.9rem">${user.country}, ${user.city}</h6>
+                <p>${user.about}</p>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
             <div class="title-bar hide-for-large">
                 <div class="title-bar-left">
                     <button class="menu-icon" type="button" data-open="my-info"></button>
-                    <span class="title-bar-title"><a href="${pageContext.request.contextPath}/profile">${data.firstName} ${data.lastName}</a></span>
+                    <span class="title-bar-title"><a href="${pageContext.request.contextPath}/profile">${user.firstName} ${user.lastName}</a></span>
                 </div>
             </div>
             <div class="callout primary">
@@ -52,12 +52,12 @@
             <div class="row small-up-2 medium-up-3 large-up-4">
 
 
-                <c:forEach items="${messages}" var="messages" >
+                <c:forEach items="${usersFound}" var="userFound" >
 
                     <div class="column" style="text-align: center">
-                        <a href="${pageContext.request.contextPath}/user/${messages.userId}"><img class="thumbnail" src="${pageContext.request.contextPath}/image/${messages.username}/avatar.jpg"></a>
-                        <h6><i id="dot${messages.userId}" class="fa fa-circle" aria-hidden="true" style="color:#e6e6e6"></i> <a href="${pageContext.request.contextPath}/user/${messages.userId}">${messages.firstName}, ${messages.lastName}</a></h6>
-                        <h6>${messages.city}, ${messages.country}</h6>
+                        <a href="${pageContext.request.contextPath}/user/${userFound.userId}"><img class="thumbnail" src="${pageContext.request.contextPath}/image/${userFound.username}/avatar.jpg"></a>
+                        <h6><i id="dot${userFound.userId}" class="fa fa-circle" aria-hidden="true" style="color:#e6e6e6"></i> <a href="${pageContext.request.contextPath}/user/${userFound.userId}">${userFound.firstName}, ${userFound.lastName}</a></h6>
+                        <h6>${userFound.city}, ${userFound.country}</h6>
                     </div>
 
                 </c:forEach>
@@ -79,7 +79,24 @@
             $("#alertMessage").html("You have no friends :(");
             $("#alertMessage").show();
         }
+        if ("" != "${successString}") {
+            if ("already" == "${successString}") {
+                $("#alertMessage2").removeClass();
+                $("#alertMessage2").addClass("alert-box warning round");
+                $("#alertMessage2").html("You are already friends!");
+            } else if ("expired" == "${successString}") {
+                $("#alertMessage2").removeClass();
+                $("#alertMessage2").addClass("alert-box warning round");
+                $("#alertMessage2").html("Invitation expired!");
+            } else if ("accepted" == "${successString}") {
+                $("#alertMessage2").removeClass();
+                $("#alertMessage2").addClass("alert-box success radius");
+                $("#alertMessage2").html("Invitation accepted!");
 
+            }
+            $("#alertMessage2").show();
+        }
+        <% session.setAttribute("successString",""); %>
         <c:forEach items="${online}" var="userOnline"><c:if test="${userOnline.userId > 0}">$("#dot${userOnline.userId}").css('color', 'green');</c:if></c:forEach>
 
     });

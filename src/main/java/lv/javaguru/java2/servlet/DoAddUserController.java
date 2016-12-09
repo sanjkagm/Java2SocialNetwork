@@ -1,12 +1,14 @@
 package lv.javaguru.java2.servlet;
 
 
+
 import lv.javaguru.java2.database.UserDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.mvc.MVCController;
 import lv.javaguru.java2.mvc.MVCModel;
 import lv.javaguru.java2.service.AddUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,7 +27,10 @@ import java.util.Map;
  * Created by Pavel on 06.11.2016..
  */
 //@WebServlet(urlPatterns = { "/doAddUser" })
+    @Component
 public class DoAddUserController /*extends HttpServlet*/ implements MVCController {
+    @Autowired
+    private AddUserService addUserService;
     /*private static final long serialVersionUID = 1L;
 
     public DoAddUserController() {
@@ -107,7 +112,7 @@ public class DoAddUserController /*extends HttpServlet*/ implements MVCControlle
             String about =              request.getParameter("about");
 
 
-            AddUserService addUserService = new AddUserService();
+          //  AddUserService addUserService = new AddUserService();
             String resultOfRegistration = addUserService.register(username,password,password_repeat,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
             // If error, forward to Edit page with pre-entered data.
