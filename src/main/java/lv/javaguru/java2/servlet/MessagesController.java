@@ -1,91 +1,96 @@
 package lv.javaguru.java2.servlet;
 
+import lv.javaguru.java2.database.UserMessageDAO;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.domain.UserMessage;
-import lv.javaguru.java2.mvc.MVCController;
-import lv.javaguru.java2.mvc.MVCModel;
 import lv.javaguru.java2.service.MessagesService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Pavel on 29.11.2016..
  */
-public class MessagesController implements MVCController {
+@Controller
+public class MessagesController {
 
-    public MVCModel processGet(HttpServletRequest req) {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private MessagesService msgService;
+
+    @RequestMapping(value = "messages/delete/{msgId}", method = {RequestMethod.GET})
+    public ModelAndView processGetOneRequest(@PathVariable("msgId") String msgId, HttpServletRequest request, HttpServletResponse response) {
+
+        User userInSession = msgService.checkIfUserLoggedIn(request);
+        if (userInSession == null) {
+            return new ModelAndView("redirect:/login");
+        } else {
+            String[] messages = new String[2];
+            msgService.deleteMsg(msgId);
+            List<UserMessage> data = msgService.getMessagesToUserByUsername(userInSession.getUsername());
+            if (data.size() == 0) {
+                messages[1] = "You have no messages.";
+            }
+            messages[0] = "Message deleted.";
+
+            Map<String, Object> myModel = new HashMap<>();
+            myModel.put("data", data);
+            myModel.put("messages", messages);
+
+            return new ModelAndView("messagesView", myModel);
+        }
+
+
+    }
+
+    @RequestMapping(value = "messages", method = {RequestMethod.GET})
+    public ModelAndView processGetAllRootRequest(HttpServletRequest request, HttpServletResponse response) {
 
         String view;
         List<UserMessage> data;
         String[] messages = new String[2];
 
-
-
-
-
-        MessagesService msgService = new MessagesService();
-
         try {
-            String pathInfo = req.getServletPath();
-            String action = null;
-            String msgId = null;
-            if (pathInfo == null) {
-                //
-            } else {
-                String[] pathParts = pathInfo.split("/");
-                if (pathParts.length > 2) {
-                    action = pathParts[2]; //
-                }
-                if (pathParts.length > 3) {
-                    msgId = pathParts[3]; //
-                }
-            }
-            if (action == null) {
-
-
-                User userInSession = msgService.checkIfUserLoggedIn(req);
-                data = msgService.getMessagesToUserByUsername(userInSession.getUsername());
-                view = "/messagesView.jsp";
-                if (data.size() == 0) {
-                    messages[1] = "You have no messages.";
-                    messages[0] = null;
-                }
-            }
-            else if (action.equals("delete")) {
-                if (msgId != null) {
-                    User userInSession = msgService.checkIfUserLoggedIn(req);
-                    msgService.deleteMsg(msgId);
-                    data = msgService.getMessagesToUserByUsername(userInSession.getUsername());
-                    view = "/messagesView.jsp";
-                    if (data.size() == 0) {
-                        messages[1] = "You have no messages.";
-                    }
-                    messages[0] = "Message deleted.";
-                } else {
-                    view = "/error.jsp";
-                    data = null;
-                    messages[0] = "Message ID: " + msgId;
-                }
-
-            } else {
-                view = "/error.jsp";
-                data = null;
-                messages[0] = "Action: " + action;
+            User userInSession = msgService.checkIfUserLoggedIn(request);
+            if (userInSession == null) {
+                return new ModelAndView("redirect:/login");
             }
 
+            data = msgService.getMessagesToUserByUsername(userInSession.getUsername());
+            view = "messagesView";
+            if (data.size() == 0) {
+                messages[1] = "You have no messages.";
+                messages[0] = null;
+            }
 
         } catch (Exception exception) {
-            view = "/error.jsp";
+            view = "error";
             data = null;
             messages[0] = "Error";
         }
 
-        return new MVCModel(view,data,messages);
+        Map<String, Object> myModel = new HashMap<>();
+        myModel.put("data", data);
+        myModel.put("messages", messages);
+
+        return new ModelAndView(view, myModel);
     }
 
-
-    public MVCModel processPost(HttpServletRequest req) {
-        return processGet(req);
+    @RequestMapping(value = "messages", method = {RequestMethod.POST})
+    public ModelAndView processPostRequest(HttpServletRequest request, HttpServletResponse response) {
+        return processGetAllRootRequest(request, response);
     }
 
 }

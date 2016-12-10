@@ -121,8 +121,6 @@
         $('input,textarea').attr('readonly', 'true');
 
 
-        var confirmMessage = "Are you sure?";
-
         $("[action='add'],[action='remove'],[action='cancel']").on('click', function (e) {
             e.preventDefault();
             //$("#alertMessage").hide();
@@ -172,6 +170,12 @@
                                 $("#alertMessage").show();
                                 $("#friendLink").attr("action","add");
                                 $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Send request");
+                            }
+                            else if (data == 'already') {
+                                $("#alertMessage").html("There is pending invitation already.");
+                                $("#alertMessage").show();
+                                $("#friendLink").attr("action","cancel");
+                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Cancel invitation");
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown)

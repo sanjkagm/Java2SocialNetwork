@@ -3,6 +3,9 @@ package lv.javaguru.java2.database.jdbc;
 import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +13,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class UserDAOImpl extends DAOImpl implements UserDAO {
 
+    private Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     public Long getIdByUsername(String username) throws DBException {
         Connection connection = null;

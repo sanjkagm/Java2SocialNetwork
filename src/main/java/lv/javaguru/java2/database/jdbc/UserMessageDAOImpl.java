@@ -4,6 +4,9 @@ import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.database.UserMessageDAO;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.domain.UserMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -15,7 +18,10 @@ import java.util.List;
 /**
  * Created by Pavel on 29.11.2016..
  */
+@Component
 public class UserMessageDAOImpl extends DAOImpl implements UserMessageDAO {
+
+    private Logger logger = LoggerFactory.getLogger(UserMessageDAOImpl.class);
 
     public List<UserMessage> getMessagesToUserByUsername(String username) throws DBException {
         List<UserMessage> userMessages = new ArrayList<>();
@@ -209,5 +215,30 @@ public class UserMessageDAOImpl extends DAOImpl implements UserMessageDAO {
         }
     }
 
+    public Integer readMsg(Long msgId) throws DBException {
+
+        Integer result = null;
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("update MESSAGES set is_read = 1 " +
+                            "where id = ?");
+
+            preparedStatement.executeQuery("SET NAMES 'UTF8'");
+            preparedStatement.executeQuery("SET CHARACTER SET 'UTF8'");
+
+            preparedStatement.setLong(1, msgId);
+            //System.out.println(preparedStatement);
+            result = preparedStatement.executeUpdate();
+            return result;
+        } catch (Throwable e) {
+            System.out.println("Exception while execute UserMessageDAOImpl.update()");
+            e.printStackTrace();
+            throw new DBException(e);
+        } finally {
+            closeConnection(connection);
+        }
+    }
 
 }

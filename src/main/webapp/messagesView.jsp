@@ -100,11 +100,7 @@
                                 </div>
                                 <div style="width:100% !important">
                                     <small>Message</small>
-                                    <div id="msg" style="width:100% !important;white-space: normal; max-height: 50px !important; overflow: visible !important;">{{msg.message}}</div>
-                                    <!--<div style="display: -webkit-flex; display: flex;">
-                                        <button class="demo-button">MESSAGE</button>
-                                        <button class="demo-button whitebutton">EDIT</button>
-                                    </div>-->
+                                    <div id="msg" style="width:100%;white-space: normal; height: 130px; overflow: auto;">{{msg.message}}</div>
                                 </div>
                             </div>
                         </template>
@@ -112,13 +108,6 @@
 
 
                     <style type="text/css">
-                    /*tr.vaadin-grid-row {
-                        cursor: pointer;
-                    }
-                    .vaadin-grid-0 {
-                        white-space: normal;
-                    }*/
-
                     .vaadin-grid-footer {
                         display:none !important;
                     }
@@ -127,7 +116,6 @@
                         width: 100%;
                         box-sizing: border-box;
                     }
-
                     .userdetails {
                         padding: 10px;
                         width: 100%;
@@ -136,22 +124,20 @@
                         -moz-box-shadow: 0px 0px 15px -3px rgba(0,0,0,0.75);
                         box-shadow: 0px 0px 15px -3px rgba(0,0,0,0.75);
                     }
-
                     .userdetails img {
                         margin-right: 10px;
                     }
-
                     .userdetails small {
                         color: #AAA;
                         font-weight: 100;
                         padding-bottom: 2px;
                     }
-
-                    .userdetails div {
-                        /*text-transform: capitalize;*/
+                    .notread {
+                        font-weight: bolder;
                     }
-
-
+                    .read {
+                        color: gray;
+                    }
                 </style>
                 </c:if>
             </div>
@@ -191,15 +177,11 @@
 
     function getUserDetails(message) {
         template.msg = message;
-        //template.msg.message = $.parseHTML(template.msg.message);
-        //alert(template.msg.id);
-        //alert(templateWrapper.querySelector('.userdetails').outerHTML);
+
         return templateWrapper.querySelector('.userdetails').outerHTML;
     }
 </script>
 <script>
-    // The Web Components polyfill introduces a custom event we can
-    // use to determine when the custom elements are ready to be used.
     window.addEventListener("WebComponentsReady", function () {
 
         // Reference to the grid element.
@@ -207,7 +189,7 @@
         var regex = /(<([^>]+)>)/ig
         grid.items = [
             <c:forEach items="${data}" var="message" >
-            { "id": "${message.id}", "created": "${fn:substring(message.created, 0, 16)}", "sender": "${message.sender}", "message": `${message.text}`, "messageStripped": `${message.text}`.replace(regex, "") },
+            { "is_read": "${message.isRead}","id": "${message.id}", "created": "${fn:substring(message.created, 0, 16)}", "sender": "${message.sender}", "message": `${message.text}`, "messageStripped": `${message.text}`.replace(regex, "") },
             </c:forEach>
         ];
         grid.rowDetailsGenerator = function(rowIndex) {
@@ -234,8 +216,10 @@
 
         grid.rowClassGenerator = function(row) {
 
+
             var rowIndex = row.index;
             row.element.setAttribute("id",grid.items[rowIndex].id);
+
 
             row.element.onclick = function() {
                 //location.href = "${pageContext.request.contextPath}/messages/" + grid.items[rowIndex].id;
@@ -244,9 +228,26 @@
                  } else {
                  grid.selection.deselect(rowIndex);
                  }*/
-                //alert(row.element.cells[1].innerText + " " + grid.items[rowIndex].id);
+                //alert(row.element.cells[0].innerText + " " + grid.items[rowIndex].id);
+                var url = "${pageContext.request.contextPath}/friend/readmsg/"+grid.items[rowIndex].id;
+                $.ajax({
+                    url : url,
+                    type: "POST",
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        if (data == 1) $("tr#"+grid.items[rowIndex].id).removeClass("notread").addClass("read");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+
+                    }
+                });
             };
-            return "";
+            var is_read = row.data['is_read'];
+            if (is_read == "false")
+                return 'notread';
+            else
+                return 'read';
 
         }
 

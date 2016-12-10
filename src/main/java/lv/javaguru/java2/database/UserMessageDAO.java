@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserMessageDAO {
 
     List<UserMessage> getMessagesToUserByUsername(String username);
-
+    Integer readMsg(Long msgId);
 
 
     void create(UserMessage user);

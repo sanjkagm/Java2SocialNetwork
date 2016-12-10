@@ -2,6 +2,7 @@ package lv.javaguru.java2.mvc;
 
 
 
+import lv.javaguru.java2.config.SpringAppConfig;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.Utils;
 import lv.javaguru.java2.servlet.AddUserController;
@@ -16,18 +17,41 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebFilter(filterName = "MVCFilter", urlPatterns = { "/addUser","/doAddUser","/messages/*" })
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+
+//@WebFilter(filterName = "MVCFilter", urlPatterns = { /*"/addUser","/doAddUser",*/"/messages/*" })
 public class MVCFilter implements Filter {
+
+    private Logger logger = LoggerFactory.getLogger(MVCFilter.class);
 
     private Map<String, MVCController> controllers;
 
+    private ApplicationContext springContext;
+
+    private MVCController getBean(Class<?> clazz) {
+        return (MVCController) springContext.getBean(clazz);
+    }
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        try {
+            springContext = new AnnotationConfigApplicationContext(SpringAppConfig.class);
+        }
+        catch (BeansException e) {
+            logger.error("Error! Spring context failure!");
+        }
+
+
         controllers = new HashMap<>();
-        controllers.put("/addUser", new AddUserController());
-        controllers.put("/doAddUser", new DoAddUserController());
-        controllers.put("/messages", new MessagesController());
-        controllers.put("/messages/", new MessagesController());
+        //controllers.put("/addUser", getBean(AddUserController.class));
+        //controllers.put("/doAddUser", getBean(DoAddUserController.class));
+        controllers.put("/messages", getBean(MessagesController.class));
+        controllers.put("/messages/", getBean(MessagesController.class));
     }
 
     @Override

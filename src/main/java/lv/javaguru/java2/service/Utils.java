@@ -18,13 +18,21 @@ import java.util.List;
 import lv.javaguru.java2.domain.UserBuilder;
 import lv.javaguru.java2.domain.UserMessage;
 import lv.javaguru.java2.domain.UserMessageBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Pavel on 15.11.2016..
  */
+@Service
 public class Utils {
 
     private static final String ATT_NAME_USER_NAME = "ATTRIBUTE_FOR_STORE_USER_NAME_IN_COOKIE";
+
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private UserMessageDAO userMessageDAO;
 
     public User checkIfUserLoggedIn(HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -163,22 +171,19 @@ public class Utils {
 
     public boolean sendMessage(Long myId, Long userId, String type) {
 
-        UserDAO userDAOObj = new UserDAOImpl();
-        UserMessageDAO userMessageObj = new UserMessageDAOImpl();
-        Utils utils = new Utils();
-        User sender = userDAOObj.getById(myId);
-        User recipient = userDAOObj.getById(userId);
+        User sender = userDAO.getById(myId);
+        User recipient = userDAO.getById(userId);
         UserMessage friendRequest = null;
         if (type.equals("remove")) {
             friendRequest =
-                    utils.createUserMessageByBuilder("0", sender.getUsername(), recipient.getUsername(),
+                    createUserMessageByBuilder("0", sender.getUsername(), recipient.getUsername(),
                             "Unfriend notification from " + sender.getUsername(), new Date(), false);
         } else if (type.equals("cancel")) {
             friendRequest =
-                    utils.createUserMessageByBuilder("0", sender.getUsername(), recipient.getUsername(),
+                    createUserMessageByBuilder("0", sender.getUsername(), recipient.getUsername(),
                             "Invitation cancelled by " + sender.getUsername() + ".", new Date(), false);
         }
-        userMessageObj.create(friendRequest);
+        userMessageDAO.create(friendRequest);
         return true;
 
     }

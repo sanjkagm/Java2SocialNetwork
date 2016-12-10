@@ -1,13 +1,6 @@
 package lv.javaguru.java2.database.jdbc;
 
 import lv.javaguru.java2.database.DBException;
-import lv.javaguru.java2.domain.User;
-import org.dbunit.database.DatabaseConfig;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
