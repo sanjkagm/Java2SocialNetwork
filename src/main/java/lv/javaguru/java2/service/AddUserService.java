@@ -3,8 +3,13 @@ package lv.javaguru.java2.service;
 import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.validators.Validators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 
 /**
@@ -16,30 +21,16 @@ public class AddUserService extends Utils {
     @Autowired
     private UserDAO userDAO;
 
-    public String validateInput(String username,
-                                String password,
-                                String password_repeat,
-                                String date_of_birth,
-                                String firstName,
-                                String lastName,
-                                String sex)
-    {
+    @Autowired
+    private Validators validators;
 
+    public String validatePasswords(String password,String password_repeat)
+    {
         String errorString = null;
 
         if (!password.equals(password_repeat))
             errorString = "Passwords not match!";
 
-        if (isEmpty(username) ||
-                isEmpty(password) ||
-                isEmpty(password_repeat) ||
-                isEmpty(date_of_birth) ||
-                isEmpty(firstName) ||
-                isEmpty(lastName) ||
-                isEmpty(sex))
-        {
-            errorString = "Fill all mandatory fields!";
-        }
         return errorString;
     }
 
@@ -59,15 +50,23 @@ public class AddUserService extends Utils {
                            String age_toStr,
                            String about)
     {
-        String errorString = validateInput(username,password,password_repeat,date_of_birth,firstName,lastName,sex);
+
+
+        User user = createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
+
+        ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
+        Validator validator = vf.getValidator();
+
+        String errorString = validators.validate(user, validator);
+
+        if (errorString == null)
+            errorString = validatePasswords(password,password_repeat);
 
         if (errorString == null) {
             try {
-
-                User user = createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
                 userDAO.create(user);
             } catch (DBException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 if (e.getMessage().toLowerCase().contains("duplicate entry")) {
                     errorString = "User already exists!";
                 } else

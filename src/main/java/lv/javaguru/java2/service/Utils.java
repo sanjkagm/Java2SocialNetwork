@@ -2,8 +2,6 @@ package lv.javaguru.java2.service;
 
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.UserMessageDAO;
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
-import lv.javaguru.java2.database.jdbc.UserMessageDAOImpl;
 import lv.javaguru.java2.domain.User;
 
 import javax.servlet.http.Cookie;

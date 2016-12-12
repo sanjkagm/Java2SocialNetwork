@@ -1,23 +1,50 @@
 package lv.javaguru.java2.domain;
 
 
+import lv.javaguru.java2.validators.Years18;
+
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class User {
 
     private Long userId;
+
+    @NotNull(message="Имя должно быть задано")
     private String firstName;
+    @NotNull(message="Фамилия должна быть задана")
+    @Size(min = 3, message="Длина фамилии должна быть больше трех")
     private String lastName;
-    @NotNull
+    @NotNull(message="Username должнен быть задан")
+    @Size(min = 3, message="Длина username должна быть больше трех")
     private String username;
+
+    @NotNull(message="Пароль должен быть задан.")
+    @Size(min = 5, message="Длина пароля должна быть больше пяти")
     private String password;
+
+    @NotNull(message="Дата рождения должна быть задана")
+    @Pattern(regexp = "((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])",
+            message = "неверная дата")
+    @Years18(message="Возраст должен превышать 18 лет")
     private String date_of_birth;
+
+
     private String city;
     private String country;
+
+    @NotNull(message="Без пола нельзя")
     private String sex;
+
+    @NotNull(message="Кого ищете сударь ?")
     private String looking_for;
+
+
     private Integer age_from;
     private Integer age_to;
+
+
     private String about;
 
     @Override

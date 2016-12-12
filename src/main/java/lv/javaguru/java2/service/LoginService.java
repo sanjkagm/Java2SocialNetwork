@@ -3,7 +3,8 @@ package lv.javaguru.java2.service;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
-
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 
 /**
