@@ -36,37 +36,15 @@ public class AddUserService extends Utils {
 
 
 
-    public String register(String username,
-                           String password,
-                           String password_repeat,
-                           String date_of_birth,
-                           String firstName,
-                           String lastName,
-                           String sex,
-                           String city,
-                           String country,
-                           String looking_for,
-                           String age_fromStr,
-                           String age_toStr,
-                           String about)
+    public String register(User user)
     {
-
-
-        User user = createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
-
-        ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-        Validator validator = vf.getValidator();
-
-        String errorString = validators.validate(user, validator);
-
-        if (errorString == null)
-            errorString = validatePasswords(password,password_repeat);
+        String
+        errorString = validators.validate(user, Validation.buildDefaultValidatorFactory().getValidator());
 
         if (errorString == null) {
             try {
                 userDAO.create(user);
             } catch (DBException e) {
-                //e.printStackTrace();
                 if (e.getMessage().toLowerCase().contains("duplicate entry")) {
                     errorString = "User already exists!";
                 } else

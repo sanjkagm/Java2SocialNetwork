@@ -25,7 +25,7 @@ import java.util.Map;
 @Controller
 public class MessagesController {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private MessagesService msgService;
@@ -51,8 +51,6 @@ public class MessagesController {
 
             return new ModelAndView("messagesView", myModel);
         }
-
-
     }
 
     @RequestMapping(value = "messages", method = {RequestMethod.GET})

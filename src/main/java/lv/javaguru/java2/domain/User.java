@@ -59,8 +59,10 @@ public class User {
         if ((this.username == null) ? (other.username != null) : !this.username.equals(other.username)) {
             return false;
         }
-        if (!this.userId.equals(other.userId)) {
-            return false;
+        if (this.userId != null) {
+            if (!this.userId.equals(other.userId)) {
+                return false;
+            }
         }
         return true;
     }
@@ -69,7 +71,7 @@ public class User {
     public int hashCode() {
         int hash = 3;
         hash = 53 * hash + (this.username != null ? this.username.hashCode() : 0);
-        hash = 53 * hash + this.userId.intValue();
+        hash = 53 * hash + (this.userId != null ? this.userId.intValue() : 0);
         return hash;
     }
 

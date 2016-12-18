@@ -23,10 +23,10 @@ import java.util.Map;
 @Controller
 public class DoAddUserController {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private AddUserService addUserService;
+    private AddUserService aS;
 
     @RequestMapping(value = "doAddUser", method = {RequestMethod.GET})
     public ModelAndView processGetRequest(HttpServletRequest request, HttpServletResponse response) {
@@ -35,33 +35,19 @@ public class DoAddUserController {
 
     @RequestMapping(value = "doAddUser", method = {RequestMethod.POST})
     public ModelAndView processPostRequest(HttpServletRequest request, HttpServletResponse response) {
-
         try {
-
-
-            User user = null;
             String[] messages = new String[2];
 
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            String password_repeat = request.getParameter("password_repeat");
-            String date_of_birth = request.getParameter("date_of_birth");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String city = request.getParameter("city");
-            String country = request.getParameter("country");
-            String sex = request.getParameter("sex");
-            String looking_for = request.getParameter("looking_for");
-            String age_fromStr = request.getParameter("age_from");
-            String age_toStr = request.getParameter("age_to");
-            String about = request.getParameter("about");
+            User user = new User();
+            getUserDataFromInput( user, request );
 
-
-            String resultOfRegistration = addUserService.register(username, password, password_repeat, date_of_birth, firstName, lastName, sex, city, country, looking_for, age_fromStr, age_toStr, about);
+            String resultOfRegistration = aS.validatePasswords( request.getParameter("password"), request.getParameter("password_repeat") );
+            if (resultOfRegistration == null) {// If passwords match
+                resultOfRegistration = aS.register( user );
+            }
 
             // If error, forward to Edit page with pre-entered data.
             if (resultOfRegistration != null) {
-                user = addUserService.createUserByBuilder("0", username, password, date_of_birth, firstName, lastName, sex, city, country, looking_for, age_fromStr, age_toStr, about);
                 messages[0] = resultOfRegistration;
                 messages[1] = null;
             }
@@ -81,9 +67,34 @@ public class DoAddUserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
 
-
+    private void getUserDataFromInput (User user, HttpServletRequest request) {
+        String username = request.getParameter("username");
+        user.setUsername(username);
+        String password = request.getParameter("password");
+        user.setPassword(password);
+        String date_of_birth = request.getParameter("date_of_birth");
+        user.setDate_of_birth(date_of_birth);
+        String firstName = request.getParameter("firstName");
+        user.setFirstName(firstName);
+        String lastName = request.getParameter("lastName");
+        user.setLastName(lastName);
+        String city = request.getParameter("city");
+        user.setCity(city);
+        String country = request.getParameter("country");
+        user.setCountry(country);
+        String sex = request.getParameter("sex");
+        user.setSex(sex);
+        String looking_for = request.getParameter("looking_for");
+        user.setLooking_for(looking_for);
+        String age_fromStr = request.getParameter("age_from");
+        user.setAge_from(aS.stringToInteger(age_fromStr));
+        String age_toStr = request.getParameter("age_to");
+        user.setAge_to(aS.stringToInteger(age_toStr));
+        String about = request.getParameter("about");
+        user.setAbout(about);
     }
 
 }

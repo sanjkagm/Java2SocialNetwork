@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class AddUserController {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "addUser", method = { RequestMethod.POST })
     public ModelAndView processPostRequest(HttpServletRequest request, HttpServletResponse response) {
