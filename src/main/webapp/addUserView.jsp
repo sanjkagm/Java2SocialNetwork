@@ -52,6 +52,11 @@
         <h3>Register to Social Network</h3>
         <p>Create account to see it in action.</p>
         <form class="m-t" role="form" action="doAddUser" method="post" name="registerForm">
+
+            <input type="hidden"
+                   name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
+
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" required="" name="username"  value="${data.username}">
             </div>

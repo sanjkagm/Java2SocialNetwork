@@ -13,7 +13,7 @@ import org.springframework.core.io.Resource;
 
 
 @Configuration
-@ComponentScan(basePackages = {"lv.javaguru.java2"})
+@ComponentScan(basePackages = {"lv.javaguru.java2","lv.javaguru.java2.config"})
 
 
 public class SpringAppConfig {

@@ -21,7 +21,7 @@ import java.io.IOException;
 @Controller
 public class FriendRequestController {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean isFriend = false;
 

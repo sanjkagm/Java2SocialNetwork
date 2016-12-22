@@ -40,8 +40,8 @@ public class DAOImpl {
 
             jdbcUrl = properties.getProperty("jdbcUrl");
             driverClass = properties.getProperty("driverClass");
-            userName = properties.getProperty("userName");
-            password = properties.getProperty("password");
+            userName = properties.getProperty("jdbc.userName");
+            password = properties.getProperty("jdbc.password");
         } catch (IOException e){
             System.out.println("Exception while reading JDBC configuration from file = " + DB_CONFIG_FILE);
             e.printStackTrace();

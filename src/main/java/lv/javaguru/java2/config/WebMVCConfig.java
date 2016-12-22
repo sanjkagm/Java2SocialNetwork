@@ -19,8 +19,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"lv.javaguru.java2"})
-@Import({ SecurityConfig.class })
+@ComponentScan(basePackages = {"lv.javaguru.java2", "lv.javaguru.java2.config"})
+//@Import({ SecurityConfig.class })
 public class WebMVCConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ViewResolver viewResolver() {
@@ -48,9 +48,9 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
     private String driverClassName;
     @Value("${jdbcUrl}")
     private String url;
-    @Value("${userName}")
-    private String username;
-    @Value("${password}")
+    @Value("${jdbc.userName}")
+    private String userName;
+    @Value("${jdbc.password}")
     private String password;
 
     @Bean(name = "dataSource")
@@ -58,8 +58,10 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(driverClassName);
         driverManagerDataSource.setUrl(url);
-        driverManagerDataSource.setUsername(username);
+        driverManagerDataSource.setUsername(userName);
         driverManagerDataSource.setPassword(password);
+
+
         return driverManagerDataSource;
     }
 

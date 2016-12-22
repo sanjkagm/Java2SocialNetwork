@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +36,7 @@ public class DoAddUserController {
     }
 
     @RequestMapping(value = "doAddUser", method = {RequestMethod.POST})
-    public ModelAndView processPostRequest(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView processPostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String[] messages = new String[2];
 
@@ -70,7 +72,10 @@ public class DoAddUserController {
     }
 
 
-    private void getUserDataFromInput (User user, HttpServletRequest request) {
+    private void getUserDataFromInput (User user, HttpServletRequest request) throws IOException{
+
+        request.setCharacterEncoding("UTF-8");
+
         String username = request.getParameter("username");
         user.setUsername(username);
         String password = request.getParameter("password");

@@ -1,6 +1,6 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.UserMessageDAO;
+
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.domain.UserMessage;
 import lv.javaguru.java2.service.MessagesService;
