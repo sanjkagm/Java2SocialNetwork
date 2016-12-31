@@ -1,11 +1,14 @@
 package lv.javaguru.java2.database.jdbc;
 
+import lv.javaguru.java2.config.SpringAppConfig;
+import lv.javaguru.java2.database.DBException;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.Utils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 
@@ -15,10 +18,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class UserDAOImplTest extends DBUnitTestCase {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-    private UserDAO userDAO = new UserDAOImpl();
-    private Utils utils = new Utils();
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = SpringAppConfig.class)
+@WebAppConfiguration
+
+public class UserDAOImplTest {
+
+//public class UserDAOImplTest extends DBUnitTestCase {
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private Utils utils;
 
     private String firstName = "firstName";
     private String lastName = "lastName";
@@ -34,20 +49,30 @@ public class UserDAOImplTest extends DBUnitTestCase {
     private String about = "aboutTest";
 
 
-    @Override
+    /*@Override
     protected String getDatabaseFile() {
         return "dbscripts/UserDAOImplTest.xml";
-    }
+    }*/
 
 
     @Before
     public void setUp() throws Exception {}
 
     @After
-    public void tearDown() throws Exception {}
+    public void tearDown() throws DBException {
+        /*while (userDAO.getIdByUsername(username) != null) {
+            userDAO.delete(userDAO.getIdByUsername(username));
+        }*/
+        List<User> userListFromDB = userDAO.getAll();
+        if (userListFromDB.size() > 0){
+            for (User item : userListFromDB){
+                userDAO.delete(item.getUserId());
+            }
+        }
+    }
 
     @Test
-    public void create() throws Exception {
+    public void create()  throws DBException {
         User user = utils.createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
         userDAO.create(user);

@@ -2,13 +2,17 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.EditUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static lv.javaguru.java2.service.Utils.isEmpty;
@@ -27,14 +31,19 @@ public class DoProfileServlet extends HttpServlet {
         super();
     }
 
+    @Autowired
+    private EditUserService editUserService;
+
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
-
-
-        EditUserService editUserService = new EditUserService();
         User userInSession = editUserService.checkIfUserLoggedIn(request);
 
         if (userInSession == null) {
@@ -63,16 +72,19 @@ public class DoProfileServlet extends HttpServlet {
 
         String passwordForm = request.getParameter("passwordForm");
 
+        String currentPassword = userInSession.getPassword();
+
 
 
 
         String errorString, successString;
-        User user = editUserService.createUserByBuilder(userIdStr,username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
+        User user = editUserService.createUserByBuilder(userIdStr,username,currentPassword,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
 
         if (!isEmpty(passwordForm)) {   // Password change form handler
 
             errorString = editUserService.updatePassword(password, password_repeat,userIdStr);
+
 
             request.setAttribute("user", userInSession);
             request.setAttribute("user_in_edit", userInSession);
@@ -81,7 +93,7 @@ public class DoProfileServlet extends HttpServlet {
 
         } else {    // User info form handler
 
-            errorString = editUserService.updateUserInfo(userIdStr,username,firstName,lastName,city,country,looking_for,age_fromStr,age_toStr,about,sex,date_of_birth);
+            errorString = editUserService.updateUserInfo(userIdStr,username,firstName,lastName,city,country,looking_for,age_fromStr,age_toStr,about,sex,date_of_birth, currentPassword);
 
             request.setAttribute("user", userInSession);
             request.setAttribute("user_in_edit", user);
@@ -104,7 +116,12 @@ public class DoProfileServlet extends HttpServlet {
             if (isEmpty(passwordForm)) {
                 request.setAttribute("user", user);
                 editUserService.storeLoggedUserInSession(request,user);
+            } else { // if passwordForm is NOT EMPTY
+                User userTmp = userInSession;
+                userTmp.setPassword(password);
+                editUserService.storeLoggedUserInSession(request,userTmp);
             }
+
             request.setAttribute("successString", successString);
             RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/profileView.jsp");
             dispatcher.forward(request, response);

@@ -1,9 +1,14 @@
 package lv.javaguru.java2.servlet;
+import com.mchange.v2.c3p0.PooledDataSource;
 
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.LoginService;
 import lv.javaguru.java2.service.MainService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +22,15 @@ import java.util.List;
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Autowired
+    private MainService mainService;
+
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
+
     public MainServlet() {
         super();
     }
@@ -26,7 +40,6 @@ public class MainServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Check User has logged on
-        MainService mainService = new MainService();
         User userInSession = mainService.checkIfUserLoggedIn(request);
         // Not logged in
         if (userInSession == null) {
@@ -34,11 +47,15 @@ public class MainServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
         // Store info in request attribute
         request.setAttribute("user", userInSession);
 
+
+
         // Found users
         List<User> usersFound = mainService.getFriends(userInSession.getUserId());
+
         if (usersFound.size() == 0)
             request.setAttribute("errorString", "noFriends");
 

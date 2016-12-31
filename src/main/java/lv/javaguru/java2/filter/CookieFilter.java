@@ -7,6 +7,8 @@ import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import java.io.IOException;
 
@@ -28,9 +30,15 @@ public class CookieFilter implements Filter {
     public CookieFilter() {
     }
 
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private Utils utils;
+
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
-
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                fConfig.getServletContext());
     }
 
     @Override
@@ -45,7 +53,6 @@ public class CookieFilter implements Filter {
         HttpSession session = req.getSession();
 
 
-        Utils utils = new Utils();
         User userInSession = utils.checkIfUserLoggedIn((HttpServletRequest)request);
 
         if (userInSession != null) {
@@ -63,8 +70,8 @@ public class CookieFilter implements Filter {
         if (checked == null) {
             String userName = utils.getUserNameInCookie(req);
             try {
-                UserDAO userDAOObj = new UserDAOImpl();
-                User user = userDAOObj.getByUsername(userName);
+
+                User user = userDAO.getByUsername(userName);
                 utils.storeLoggedUserInSession((HttpServletRequest)request, user);
             } catch (Exception e) {
                 e.printStackTrace();

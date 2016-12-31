@@ -9,6 +9,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -17,6 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseUtil extends DAOImpl {
+
+    @Value("${driverClass}")
+    private String driverClassName;
+    @Value("${jdbcUrl}")
+    private String url;
+    @Value("${jdbc.userName}")
+    private String userName;
+    @Value("${jdbc.password}")
+    private String password;
 
     void setupDatabaseFromFile(String fileName) throws Exception {
         IDatabaseTester databaseTester = new JdbcDatabaseTester(

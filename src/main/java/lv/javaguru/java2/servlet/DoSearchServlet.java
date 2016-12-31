@@ -4,8 +4,11 @@ import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.SearchService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,17 +25,24 @@ import java.util.List;
 public class DoSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-
-
     public DoSearchServlet() {
         super();
+    }
+
+    @Autowired
+    private SearchService searchService;
+
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        SearchService searchService = new SearchService();
+
         User userInSession = searchService.checkIfUserLoggedIn(request);
 
         if (userInSession == null) {

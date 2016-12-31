@@ -3,6 +3,8 @@ package lv.javaguru.java2.config;
 /**
  * Created by Pavel on 09.12.2016..
  */
+
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,6 +17,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 
 
 @Configuration
@@ -44,16 +49,7 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
 
 
 
-    @Value("${driverClass}")
-    private String driverClassName;
-    @Value("${jdbcUrl}")
-    private String url;
-    @Value("${jdbc.userName}")
-    private String userName;
-    @Value("${jdbc.password}")
-    private String password;
-
-    @Bean(name = "dataSource")
+    /*@Bean(name = "dataSource")
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(driverClassName);
@@ -63,6 +59,7 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
 
 
         return driverManagerDataSource;
-    }
+    }*/
+
 
 }

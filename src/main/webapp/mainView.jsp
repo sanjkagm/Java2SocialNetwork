@@ -50,16 +50,12 @@
 
 
             <div class="row small-up-2 medium-up-3 large-up-4">
-
-
                 <c:forEach items="${usersFound}" var="userFound" >
-
                     <div class="column" style="text-align: center">
                         <a href="${pageContext.request.contextPath}/user/${userFound.userId}"><img class="thumbnail" src="${pageContext.request.contextPath}/image/${userFound.username}/avatar.jpg"></a>
                         <h6><i id="dot${userFound.userId}" class="fa fa-circle" aria-hidden="true" style="color:#e6e6e6"></i> <a href="${pageContext.request.contextPath}/user/${userFound.userId}">${userFound.firstName}, ${userFound.lastName}</a></h6>
                         <h6>${userFound.city}, ${userFound.country}</h6>
                     </div>
-
                 </c:forEach>
 
             </div>

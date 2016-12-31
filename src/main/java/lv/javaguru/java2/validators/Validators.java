@@ -24,8 +24,7 @@ public class Validators{
 
     public static String validate(Object object, Validator validator) {
 
-        Set<ConstraintViolation<Object>> constraintViolations = validator
-                .validate(object);
+        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object);
         String returnString = null;
         final String SEPARATOR = System.getProperty("line.separator");
 

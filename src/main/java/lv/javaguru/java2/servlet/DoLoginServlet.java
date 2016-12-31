@@ -3,6 +3,7 @@ package lv.javaguru.java2.servlet;
 
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,14 +11,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @WebServlet(urlPatterns = { "/doLogin" })
 public class DoLoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Autowired
+    private LoginService loginService;
+
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
+
     public DoLoginServlet() {
         super();
     }
+
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,7 +40,7 @@ public class DoLoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        LoginService loginService = new LoginService();
+        //LoginService loginService = new LoginService();
         String resultOfAuth = loginService.authenticate(username, password);
 
 

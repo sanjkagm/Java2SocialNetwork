@@ -1,12 +1,21 @@
 package lv.javaguru.java2.database.jdbc;
 
 import lv.javaguru.java2.database.DBException;
+import lv.javaguru.java2.database.GenericHibernateDAOImpl;
 import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.domain.User;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.JDBCException;
+import org.hibernate.SQLQuery;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,13 +23,142 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserDAOImpl extends DAOImpl implements UserDAO {
+public class UserDAOImpl extends GenericHibernateDAOImpl<User> implements UserDAO {
 
     private Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
-    public Long getIdByUsername(String username) throws DBException {
-        Connection connection = null;
 
+    @Transactional
+    public Long getIdByUsername(String username) throws JDBCException {
+        String hql = "select UserID from USERS where username = :username";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("username", username);
+        if (query.list().size() > 0){
+
+            return new Long((int)query.list().get(0));
+        }
+        return null;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<User> getFriends(Long myId) throws JDBCException {
+        String hql = "select * from USERS where UserID IN (SELECT friend_id FROM users_friends WHERE user_id = :myId AND is_accepted = 1) OR UserID IN (SELECT user_id FROM users_friends WHERE friend_id = :myId AND is_accepted = 1)";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql)
+                .addEntity(User.class);
+        query.setParameter("myId", myId);
+        return query.list();
+    }
+
+    @Transactional
+    public User getByUsernameAndPassword(String username, String password) throws JDBCException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(persistentClass);
+        criteria.add(Restrictions.eq("username", username));
+        criteria.add(Restrictions.eq("password", password));
+        return criteria.list().size() == 1 ? (User)criteria.list().get(0) : null;
+    }
+
+    @Transactional
+    public User getByUsername(String username) throws JDBCException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(persistentClass);
+        criteria.add(Restrictions.eq("username", username));
+        return criteria.list().size() == 1 ? (User)criteria.list().get(0) : null;
+    }
+
+
+
+    @Transactional
+    public boolean checkUserPending(Long myId, Long userId) throws JDBCException {
+        String hql = "select id from users_friends where (user_id = :myId AND friend_id = :userId AND is_accepted = 0) OR (friend_id = :myId AND user_id = :userId AND is_accepted = 0) LIMIT 1";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("myId", myId);
+        query.setParameter("userId", userId);
+        return query.list().size() > 0 ? true : false;
+    }
+
+    @Transactional
+    public int acceptFriendRequest(Long myId, Long userId) throws JDBCException {
+        String hql = "update USERS_FRIENDS set is_accepted = 1 where user_id = :userId and friend_id = :myId";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("myId", myId);
+        query.setParameter("userId", userId);
+
+        return query.executeUpdate();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<User> search(String city, String country, String looking_for, Integer age_from, Integer age_to, Long myId) throws JDBCException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(persistentClass);
+        criteria.add(Restrictions.like("city", "%"+city+"%"));
+        criteria.add(Restrictions.like("country", "%"+country+"%"));
+        criteria.add(Restrictions.eq("looking_for", looking_for));
+
+        if (age_from > 0)
+            criteria.add(Restrictions.le("age_from", age_from));
+        else
+            criteria.add(Restrictions.ge("age_from", age_from));
+
+        criteria.add(Restrictions.ge("age_to", age_to));
+        criteria.add(Restrictions.ne("userId", myId));
+
+        return criteria.list();
+    }
+
+    @Transactional
+    public void updatePassword(User user) throws JDBCException {
+        String hql = "update USERS set password = :password where UserID = :UserID";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("password", user.getPassword());
+        query.setParameter("UserID", user.getUserId());
+        query.executeUpdate();
+    }
+
+    @Transactional
+    public void addFriend(Long myId, Long userId) throws JDBCException {
+        String hql = "insert into users_friends values (default, :myId, :userId, 1)";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("myId", myId);
+        query.setParameter("userId", userId);
+        query.executeUpdate();
+    }
+
+    @Transactional
+    public BigInteger addFriendRequest(Long myId, Long userId) throws JDBCException {
+
+        String hql = "insert into users_friends values (default, :myId, :userId, 0)";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("myId", myId);
+        query.setParameter("userId", userId);
+        query.executeUpdate();
+
+        BigInteger result = (BigInteger)sessionFactory.getCurrentSession().createSQLQuery("SELECT LAST_INSERT_ID()").uniqueResult();
+
+        return result;
+    }
+
+    @Transactional
+    public void removeFriend(Long myId, Long userId) throws JDBCException  {
+        String hql = "delete from users_friends where (user_id = :myId AND friend_id = :userId) OR (friend_id = :myId AND user_id = :userId)";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("myId", myId);
+        query.setParameter("userId", userId);
+        query.executeUpdate();
+    }
+
+    @Transactional
+    public boolean checkUserFriend(Long myId, Long userId) throws DBException {
+        String hql = "select id from users_friends where (user_id = :myId AND friend_id = :userId AND is_accepted = 1) OR (friend_id = :myId AND user_id = :userId AND is_accepted = 1) LIMIT 1";
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+        query.setParameter("myId", myId);
+        query.setParameter("userId", userId);
+
+        return query.list().size() > 0 ? true : false;
+    }
+
+    /*public Long getIdByUsername(String username) throws DBException {
+        Connection connection = null;
 
         try {
             connection = getConnection();
@@ -84,7 +222,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
 
     }
 
-    public User getById(Long id) throws DBException {
+    public User getById(long id) throws DBException {
         Connection connection = null;
 
         try {
@@ -244,7 +382,7 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
         return users;
     }
 
-    public void delete(Long id) throws DBException {
+    public void delete(long id) throws DBException {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -548,5 +686,6 @@ public class UserDAOImpl extends DAOImpl implements UserDAO {
         }
         return users;
     }
+    */
 
 }
