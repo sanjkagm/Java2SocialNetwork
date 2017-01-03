@@ -18,6 +18,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -28,6 +30,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 
 public class UserDAOImplTest {
+    private Logger logger = LoggerFactory.getLogger(UserDAOImplTest.class);
 
 //public class UserDAOImplTest extends DBUnitTestCase {
     @Autowired
@@ -96,6 +99,8 @@ public class UserDAOImplTest {
     }
     @Test
     public void testGetUserByIdNull() throws Exception {
+        logger.error("Here is some TEST ERROR");
+        System.out.println("ABC!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         assertNull(userDAO.getById(1L));
     }
 
@@ -130,7 +135,6 @@ public class UserDAOImplTest {
 
     @Test
     public void delete() throws Exception {
-        Utils utils = new Utils();
         int userListSize = userDAO.getAll().size();
         User user = utils.createUserByBuilder("0",username,password,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
         userDAO.create(user);

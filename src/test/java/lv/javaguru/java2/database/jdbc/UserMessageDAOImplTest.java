@@ -3,6 +3,7 @@ package lv.javaguru.java2.database.jdbc;
 import lv.javaguru.java2.database.UserMessageDAO;
 import lv.javaguru.java2.domain.UserMessage;
 import lv.javaguru.java2.service.Utils;
+import lv.javaguru.java2.service.UtilsImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import static org.junit.Assert.*;
 public class UserMessageDAOImplTest  extends DBUnitTestCase {
 
     private UserMessageDAO userMessageDAO = new UserMessageDAOImpl();
-    private Utils utils = new Utils();
+    private Utils utils = new UtilsImpl();
 
     private String sender = "user1";
     private String recipient = "user2";

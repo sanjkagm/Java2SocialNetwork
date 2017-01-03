@@ -2,6 +2,7 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.EditUserService;
+import lv.javaguru.java2.service.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -27,6 +28,8 @@ public class ProfileServlet extends HttpServlet {
 
     @Autowired
     private EditUserService editUserService;
+    @Autowired
+    private Utils utils;
 
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
@@ -38,7 +41,7 @@ public class ProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        User userInSession = editUserService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
 
         if (userInSession == null) {
             response.sendRedirect(request.getContextPath() + "/login");

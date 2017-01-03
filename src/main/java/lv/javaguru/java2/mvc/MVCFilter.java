@@ -5,6 +5,7 @@ package lv.javaguru.java2.mvc;
 import lv.javaguru.java2.config.SpringAppConfig;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.Utils;
+import lv.javaguru.java2.service.UtilsImpl;
 import lv.javaguru.java2.servlet.AddUserController;
 import lv.javaguru.java2.servlet.DoAddUserController;
 import lv.javaguru.java2.servlet.MessagesController;
@@ -68,7 +69,7 @@ public class MVCFilter implements Filter {
         } else {
 
             if (contextURI.contains("/messages")) {
-                Utils utils = new Utils();
+                Utils utils = new UtilsImpl();
                 User userInSession = utils.checkIfUserLoggedIn(req);
 
                 if (userInSession == null) {

@@ -19,14 +19,14 @@ import java.util.List;
 
 public class DatabaseUtil extends DAOImpl {
 
-    @Value("${driverClass}")
+    /*@Value("${driverClass}")
     private String driverClassName;
     @Value("${jdbcUrl}")
     private String url;
     @Value("${jdbc.userName}")
     private String userName;
     @Value("${jdbc.password}")
-    private String password;
+    private String password;*/
 
     void setupDatabaseFromFile(String fileName) throws Exception {
         IDatabaseTester databaseTester = new JdbcDatabaseTester(

@@ -34,6 +34,7 @@ public class AddUserController {
         logger.warn("Here is some WARN");
         logger.error("Here is some ERROR");
         logger.trace("Here is some TRACE");*/
+        logger.error("Here is some ERROR");
 
         return new ModelAndView("addUserView", "model", null);
     }

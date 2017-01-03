@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.PooledDataSource;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.LoginService;
 import lv.javaguru.java2.service.MainService;
+import lv.javaguru.java2.service.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -24,6 +25,8 @@ public class MainServlet extends HttpServlet {
 
     @Autowired
     private MainService mainService;
+    @Autowired
+    private Utils utils;
 
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
@@ -40,7 +43,7 @@ public class MainServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Check User has logged on
-        User userInSession = mainService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         // Not logged in
         if (userInSession == null) {
             // Redirect to login page.

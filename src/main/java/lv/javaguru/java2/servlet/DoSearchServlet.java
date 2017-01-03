@@ -4,6 +4,7 @@ import lv.javaguru.java2.database.UserDAO;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.SearchService;
+import lv.javaguru.java2.service.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -31,6 +32,8 @@ public class DoSearchServlet extends HttpServlet {
 
     @Autowired
     private SearchService searchService;
+    @Autowired
+    private Utils utils;
 
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
@@ -43,7 +46,7 @@ public class DoSearchServlet extends HttpServlet {
             throws ServletException, IOException {
 
 
-        User userInSession = searchService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
 
         if (userInSession == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -60,7 +63,7 @@ public class DoSearchServlet extends HttpServlet {
         String age_toStr = request.getParameter("age_to");
 
         // Preset data for search form
-        User searchData = searchService.createUserByBuilder("0","username","password","date_of_birth","firstName","lastName","sex",city,country,looking_for,age_fromStr,age_toStr,"about");
+        User searchData = utils.createUserByBuilder("0","username","password","date_of_birth","firstName","lastName","sex",city,country,looking_for,age_fromStr,age_toStr,"about");
         request.setAttribute("searchData", searchData);
 
 

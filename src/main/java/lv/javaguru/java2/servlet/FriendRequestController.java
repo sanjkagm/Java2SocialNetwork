@@ -2,6 +2,7 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.FriendRequestService;
+import lv.javaguru.java2.service.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,14 @@ public class FriendRequestController {
 
     @Autowired
     private FriendRequestService friendService;
+    @Autowired
+    private Utils utils;
 
 
     @RequestMapping(value = "friend/readmsg/{id}", method = {RequestMethod.POST})
     @ResponseBody
     public String processPostReadRequest(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
-        User userInSession = friendService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         if (userInSession == null) {
             return "notLoggedIn";
         }
@@ -43,7 +46,7 @@ public class FriendRequestController {
     @RequestMapping(value = "friend/accept/{fromId}/{toId}/*", method = {RequestMethod.GET})
     @ResponseBody
     public String processGetAddRequest(@PathVariable("fromId") String fromId,@PathVariable("toId") String toId, HttpServletRequest request, HttpServletResponse response) throws Exception{
-        User userInSession = friendService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         if (userInSession == null) {
             return "notLoggedIn";
         }
@@ -55,14 +58,14 @@ public class FriendRequestController {
     @RequestMapping(value = {"friend/remove","friend/cancel"}, method = {RequestMethod.POST})
     @ResponseBody
     public String processPostRemoveRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        User userInSession = friendService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         if (userInSession == null) {
             return "notLoggedIn";
         }
         String userId = request.getParameter("user_id");
         String friendId = request.getParameter("friend_id");
 
-        detectIntruder(friendService.stringToLong(userId),userInSession.getUserId(), response);
+        detectIntruder(utils.stringToLong(userId),userInSession.getUserId(), response);
 
         isFriend = friendService.removeFriend(userId,friendId);
         request.getSession().setAttribute("isFriend", isFriend);
@@ -73,7 +76,7 @@ public class FriendRequestController {
     @RequestMapping(value = "friend/add", method = {RequestMethod.POST})
     @ResponseBody
     public String processPostAddRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        User userInSession = friendService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         if (userInSession == null) {
             return "notLoggedIn";
         }
@@ -82,7 +85,7 @@ public class FriendRequestController {
         String userId = request.getParameter("user_id");
         String friendId = request.getParameter("friend_id");
 
-        detectIntruder(friendService.stringToLong(userId), userInSession.getUserId(), response);
+        detectIntruder(utils.stringToLong(userId), userInSession.getUserId(), response);
 
         request.getSession().setAttribute("isFriend", true);
         isFriend = true;

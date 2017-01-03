@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.LoginService;
+import lv.javaguru.java2.service.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @WebServlet(urlPatterns = { "/doLogin" })
@@ -20,6 +22,8 @@ public class DoLoginServlet extends HttpServlet {
 
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private Utils utils;
 
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
@@ -62,8 +66,8 @@ public class DoLoginServlet extends HttpServlet {
         else {
             User user = loginService.getUserByUsernameAndPassword(username, password);
 
-            loginService.storeLoggedUserInSession(request, user);
-            loginService.storeUserCookie(response,user);
+            utils.storeLoggedUserInSession(request, user);
+            utils.storeUserCookie(response,user);
 
 
             response.sendRedirect(request.getContextPath() + "/main");

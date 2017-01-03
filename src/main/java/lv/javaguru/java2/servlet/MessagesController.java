@@ -4,6 +4,7 @@ package lv.javaguru.java2.servlet;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.domain.UserMessage;
 import lv.javaguru.java2.service.MessagesService;
+import lv.javaguru.java2.service.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,13 @@ public class MessagesController {
 
     @Autowired
     private MessagesService msgService;
+    @Autowired
+    private Utils utils;
 
     @RequestMapping(value = "messages/delete/{msgId}", method = {RequestMethod.GET})
     public ModelAndView processGetOneRequest(@PathVariable("msgId") String msgId, HttpServletRequest request, HttpServletResponse response) {
 
-        User userInSession = msgService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         if (userInSession == null) {
             return new ModelAndView("redirect:/login");
         } else {
@@ -61,7 +64,7 @@ public class MessagesController {
         String[] messages = new String[2];
 
         try {
-            User userInSession = msgService.checkIfUserLoggedIn(request);
+            User userInSession = utils.checkIfUserLoggedIn(request);
             if (userInSession == null) {
                 return new ModelAndView("redirect:/login");
             }

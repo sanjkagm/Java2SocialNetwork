@@ -2,9 +2,15 @@ package lv.javaguru.java2.servlet;
 
 
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.EditUserService;
 import lv.javaguru.java2.service.LoginService;
+import lv.javaguru.java2.service.Utils;
+import lv.javaguru.java2.service.UtilsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,12 +28,22 @@ public class LoginServlet extends HttpServlet {
         super();
     }
 
+    @Autowired
+    private LoginService loginService;
+    @Autowired
+    private Utils utils;
+
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        LoginService loginService = new LoginService();
-        User userInSession = loginService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
 
         if (userInSession != null) {
             response.sendRedirect("/main");

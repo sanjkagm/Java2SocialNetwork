@@ -11,18 +11,8 @@ import java.util.List;
 /**
  * Created by Pavel on 30.11.2016..
  */
-@Service
-public class MessagesService extends Utils{
 
-    @Autowired
-    private UserMessageDAO userMessageDAO;
-
-    public List<UserMessage> getMessagesToUserByUsername (String username) {
-        List<UserMessage> userMessages = userMessageDAO.getMessagesToUserByUsername(username);
-        return userMessages;
-    }
-
-    public void deleteMsg (String msgId) {
-        userMessageDAO.delete(stringToLong(msgId));
-    }
+public interface MessagesService {
+    List<UserMessage> getMessagesToUserByUsername (String username);
+    void deleteMsg (String msgId);
 }

@@ -2,6 +2,7 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.AddUserService;
+import lv.javaguru.java2.service.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class DoAddUserController {
 
     @Autowired
     private AddUserService aS;
+    @Autowired
+    private Utils utils;
+
 
     @RequestMapping(value = "doAddUser", method = {RequestMethod.GET})
     public ModelAndView processGetRequest(HttpServletRequest request, HttpServletResponse response) {
@@ -95,9 +99,9 @@ public class DoAddUserController {
         String looking_for = request.getParameter("looking_for");
         user.setLooking_for(looking_for);
         String age_fromStr = request.getParameter("age_from");
-        user.setAge_from(aS.stringToInteger(age_fromStr));
+        user.setAge_from(utils.stringToInteger(age_fromStr));
         String age_toStr = request.getParameter("age_to");
-        user.setAge_to(aS.stringToInteger(age_toStr));
+        user.setAge_to(utils.stringToInteger(age_toStr));
         String about = request.getParameter("about");
         user.setAbout(about);
     }

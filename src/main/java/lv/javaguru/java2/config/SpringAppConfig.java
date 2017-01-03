@@ -18,6 +18,7 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -25,10 +26,10 @@ import java.util.Properties;
 
 
 @Configuration
-@ComponentScan(basePackages = {"lv.javaguru.java2","lv.javaguru.java2.config"})
+@ComponentScan(basePackages = {"lv.javaguru.java2"})
 @EnableTransactionManagement
 
-public class SpringAppConfig {
+public class SpringAppConfig extends WebMvcConfigurerAdapter {
 
     private static final String DATABASE_PROPERTIES_FILE = "database.properties";
 
@@ -70,6 +71,11 @@ public class SpringAppConfig {
     @Value("${hibernate.c3p0.max_statements}")
     private String c3p0Max_statements;
 
+    @Value("${connection.provider_class}")
+    private String connectionProviderclass;
+    @Value("${connection.autocommit}")
+    private String connectionAutocommit;
+
 
 
 
@@ -81,10 +87,19 @@ public class SpringAppConfig {
         properties.put("hibernate.format_sql", formatSql);
         properties.put("hibernate.hbm2ddl.auto", hbm2ddl);
 
-        properties.put("hibernate.c3p0.min_size", c3p0Min_size);
+        /*properties.put("hibernate.c3p0.min_size", c3p0Min_size);
         properties.put("hibernate.c3p0.max_size", c3p0Max_size);
         properties.put("hibernate.c3p0.timeout", c3p0Timeout);
         properties.put("hibernate.c3p0.max_statements", c3p0Max_statements);
+
+        properties.put("hibernate.connection.provider_class", connectionProviderclass);
+
+        properties.put("hibernate.connection.driver_class", driverClassName);
+        properties.put("hibernate.connection.url", url);
+        properties.put("hibernate.connection.username", userName);
+        properties.put("hibernate.connection.password", password);
+        properties.put("hibernate.connection.autocommit", connectionAutocommit);*/
+
 
 
 
@@ -101,6 +116,10 @@ public class SpringAppConfig {
         dataSource.setUsername(userName);
         dataSource.setPassword(password);
         dataSource.setDefaultAutoCommit(false);
+
+        dataSource.setInitialSize(4);
+        dataSource.setMaxActive(20);
+
 
         return dataSource;
     }

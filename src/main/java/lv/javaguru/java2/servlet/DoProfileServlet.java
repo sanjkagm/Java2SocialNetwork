@@ -2,7 +2,9 @@ package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.EditUserService;
+import lv.javaguru.java2.service.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.RequestDispatcher;
@@ -12,10 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
-import static lv.javaguru.java2.service.Utils.isEmpty;
 
 
 /**
@@ -33,6 +32,8 @@ public class DoProfileServlet extends HttpServlet {
 
     @Autowired
     private EditUserService editUserService;
+    @Autowired
+    private Utils utils;
 
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
@@ -44,7 +45,7 @@ public class DoProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        User userInSession = editUserService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
 
         if (userInSession == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -78,10 +79,10 @@ public class DoProfileServlet extends HttpServlet {
 
 
         String errorString, successString;
-        User user = editUserService.createUserByBuilder(userIdStr,username,currentPassword,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
+        User user = utils.createUserByBuilder(userIdStr,username,currentPassword,date_of_birth,firstName,lastName,sex,city,country,looking_for,age_fromStr,age_toStr,about);
 
 
-        if (!isEmpty(passwordForm)) {   // Password change form handler
+        if (!utils.isEmpty(passwordForm)) {   // Password change form handler
 
             errorString = editUserService.updatePassword(password, password_repeat,userIdStr);
 
@@ -113,13 +114,13 @@ public class DoProfileServlet extends HttpServlet {
         // If everything nice.
         // Redirect.
         else {
-            if (isEmpty(passwordForm)) {
+            if (utils.isEmpty(passwordForm)) {
                 request.setAttribute("user", user);
-                editUserService.storeLoggedUserInSession(request,user);
+                utils.storeLoggedUserInSession(request,user);
             } else { // if passwordForm is NOT EMPTY
                 User userTmp = userInSession;
                 userTmp.setPassword(password);
-                editUserService.storeLoggedUserInSession(request,userTmp);
+                utils.storeLoggedUserInSession(request,userTmp);
             }
 
             request.setAttribute("successString", successString);

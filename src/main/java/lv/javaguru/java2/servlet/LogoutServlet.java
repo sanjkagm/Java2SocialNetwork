@@ -1,8 +1,7 @@
 package lv.javaguru.java2.servlet;
 
-import lv.javaguru.java2.database.jdbc.UserDAOImpl;
-import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.Utils;
+import lv.javaguru.java2.service.UtilsImpl;
 
 
 import javax.servlet.ServletException;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet(urlPatterns = { "/logout"})
 public class LogoutServlet extends HttpServlet {
@@ -31,7 +29,7 @@ public class LogoutServlet extends HttpServlet {
         if(session != null) {
             session.invalidate();
             //Delete user cookie
-            Utils utils = new Utils();
+            Utils utils = new UtilsImpl();
             utils.deleteUserCookie(response);
 
         }

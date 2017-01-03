@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import lv.javaguru.java2.database.jdbc.UserDAOImpl;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.Utils;
+import lv.javaguru.java2.service.UtilsImpl;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -46,7 +47,7 @@ public class FileUploadHandler extends HttpServlet {
 
 
         // Check User has logged on
-        Utils utils = new Utils();
+        Utils utils = new UtilsImpl();
         User loginedUser = utils.checkIfUserLoggedIn(request);
         String subdir = loginedUser.getUsername();
 
