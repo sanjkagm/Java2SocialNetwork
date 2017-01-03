@@ -10,42 +10,133 @@ USE `java2` ;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `users` ;
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `UserID` INT(11) NOT NULL AUTO_INCREMENT,
-  `FirstName` CHAR(32) NOT NULL,
-  `LastName` CHAR(32) NOT NULL,
-  PRIMARY KEY (`UserID`)
-)
-ENGINE = InnoDB
-AUTO_INCREMENT = 1002;
+--
+-- Database: `java2app`
+--
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `messages`
+--
 
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `sender` varchar(50) NOT NULL,
+  `recipient` varchar(50) NOT NULL,
+  `text` varchar(800) NOT NULL,
+  `is_read` tinyint(1) NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
 
-ALTER TABLE `users` ADD `username` VARCHAR(255) NOT NULL FIRST, ADD `password` VARCHAR(255) NOT NULL AFTER `usename`;
-ALTER TABLE `users` ADD `date_of_birth` DATE NOT NULL ,
-                    ADD `city` VARCHAR(255) NOT NULL ,
-                    ADD `country` VARCHAR(255) NOT NULL ,
-                    ADD `sex` SET('M','F') NOT NULL DEFAULT 'M' ,
-                    ADD `looking_for` SET('M','F') NOT NULL DEFAULT 'F' ,
-                    ADD `age_from` SMALLINT NOT NULL ,
-                    ADD `age_to` SMALLINT NOT NULL ,
-                    ADD `about` TEXT NOT NULL ;
+--
+-- Table structure for table `users`
+--
 
+CREATE TABLE `users` (
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `FirstName` char(32) DEFAULT NULL,
+  `LastName` char(32) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `sex` set('M','F') DEFAULT 'M',
+  `looking_for` set('M','F') DEFAULT 'F',
+  `age_from` int(6) DEFAULT NULL,
+  `age_to` int(6) DEFAULT NULL,
+  `about` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `java2app`.`users`
-  (`username`, `password`, `UserID`, `FirstName`, `LastName`, `date_of_birth`, `city`, `country`, `sex`, `looking_for`, `age_from`, `age_to`, `about`)
-  VALUES
-  ('user1', 'user1pass', NULL, 'User1FirstName', 'User1LastName', '1998-10-04', 'Riga', 'Latvia', 'M', 'F', '18', '30', 'Very cool about text!');
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `users_friends`
+--
 
-ALTER TABLE `users` CHANGE `UserID` `UserID` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `FirstName` `FirstName` CHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `LastName` `LastName` CHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `date_of_birth` `date_of_birth` DATE NULL, CHANGE `city` `city` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `country` `country` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `sex` `sex` SET('M','F') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'M', CHANGE `looking_for` `looking_for` SET('M','F') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'F', CHANGE `age_from` `age_from` SMALLINT(6) NULL, CHANGE `age_to` `age_to` SMALLINT(6) NULL, CHANGE `about` `about` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
-ALTER TABLE `users` ADD UNIQUE( `username`);
+CREATE TABLE `users_friends` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL,
+  `is_accepted` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `users_friends` ( `id` INT NOT NULL AUTO_INCREMENT , `user_id` INT NOT NULL , `friend_id` INT NOT NULL , `is_accepted` TINYINT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+-- --------------------------------------------------------
 
-CREATE TABLE `messages` ( `id` INT NOT NULL AUTO_INCREMENT , `sender` VARCHAR(50) NOT NULL , `recipient` VARCHAR(50) NOT NULL , `text` VARCHAR(800) NOT NULL , `is_read` BOOLEAN NOT NULL , `created` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+--
+-- Table structure for table `user_roles`
+--
+
+CREATE TABLE `user_roles` (
+  `user_role_id` int(11) NOT NULL,
+  `username` varchar(45) NOT NULL,
+  `role` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`UserID`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `users_friends`
+--
+ALTER TABLE `users_friends`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_roles`
+--
+ALTER TABLE `user_roles`
+  ADD PRIMARY KEY (`user_role_id`),
+  ADD UNIQUE KEY `uni_username_role` (`role`,`username`),
+  ADD KEY `fk_username_idx` (`username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1035;
+--
+-- AUTO_INCREMENT for table `users_friends`
+--
+ALTER TABLE `users_friends`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `user_roles`
+--
+ALTER TABLE `user_roles`
+  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `user_roles`
+--
+ALTER TABLE `user_roles`
+  ADD CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `users` (`username`);
