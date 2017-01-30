@@ -5,13 +5,8 @@
   Time: 19:20
   To change this template use File | Settings | File Templates.
 --%>
-
-
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page import="lv.javaguru.java2.service.UserService"%>
-
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -148,8 +143,6 @@
         $('input,textarea').attr('readonly', 'true');
 
 
-        var confirmMessage = "Are you sure?";
-
         $("[action='add'],[action='remove'],[action='cancel']").on('click', function (e) {
             e.preventDefault();
             //$("#alertMessage").hide();
@@ -199,6 +192,12 @@
                                 $("#alertMessage").show();
                                 $("#friendLink").attr("action","add");
                                 $("#friendLink").html("<i class=\"fa fa-plus-circle\" aria-hidden=\"true\"></i> Send request");
+                            }
+                            else if (data == 'already') {
+                                $("#alertMessage").html("There is pending invitation already.");
+                                $("#alertMessage").show();
+                                $("#friendLink").attr("action","cancel");
+                                $("#friendLink").html("<i class=\"fa fa-minus-circle\" aria-hidden=\"true\"></i> Cancel invitation");
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown)
