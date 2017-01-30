@@ -3,9 +3,13 @@ package lv.javaguru.java2.servlet;
 import lv.javaguru.java2.domain.User;
 import lv.javaguru.java2.service.MainService;
 import lv.javaguru.java2.service.UserService;
-import java.lang.*;
+import lv.javaguru.java2.service.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,13 +26,25 @@ public class UserServlet extends HttpServlet {
         super();
     }
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private Utils utils;
+    @Autowired
+    private MainService mainService;
+
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Check User has logged on
-        UserService userService = new UserService();
-        User userInSession = userService.checkIfUserLoggedIn(request);
+        User userInSession = utils.checkIfUserLoggedIn(request);
         // Not logged in
         if (userInSession == null) {
             // Redirect to login page.
@@ -57,11 +73,11 @@ public class UserServlet extends HttpServlet {
         // get list of : friends of a friend
         // and friends of  user in session   to compare them
 
-        MainService friendsOfUserInSessionObj = new MainService ();
-        List<User> friendsOfUserInSession = friendsOfUserInSessionObj.getFriends(userInSession.getUserId());
+      //  MainService friendsOfUserInSessionObj = new MainService ();
+        List <User> friendsOfUserInSession = mainService.getFriends(userInSession.getUserId());
 
-        MainService friendsOfAFriendObj = new MainService ();
-        List<User>  friendsOfFriend = friendsOfAFriendObj.getFriends(Long.parseLong(userID));
+      //  MainService friendsOfAFriendObj = new MainService ();
+        List<User>  friendsOfFriend = mainService.getFriends(Long.parseLong(userID));
 
 
 
@@ -72,13 +88,13 @@ public class UserServlet extends HttpServlet {
 
 
         User user = userService.getUserById(userID);
-        Boolean isFriend = userService.checkUserFriend(userInSession.getUserId(), userID);
+
         if (user == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
             return;
         }
 
-
+        Boolean isFriend = userService.checkUserFriend(userInSession.getUserId(), userID);
         Boolean isPending = userService.checkUserPending(userInSession.getUserId(), userID);
 
 
@@ -97,11 +113,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-
-
-
-    doGet(request, response);
+        doGet(request, response);
     }
 
 }
