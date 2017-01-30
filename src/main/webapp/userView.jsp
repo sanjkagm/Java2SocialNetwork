@@ -71,6 +71,14 @@
                         <label>Country
                             <input type="text" name="country" value="${userFound.country}">
                         </label>
+                        <label>
+                            About
+                            <textarea name="about" style="height: 7.5rem; line-height:1.2">${userFound.about}</textarea>
+                        </label>
+
+
+
+
 
 
 
@@ -89,10 +97,24 @@
                             <input id="age_to" type="text" name="age_to" value="${userFound.age_to}">
                         </label>
 
-                        <label>
-                            About
-                            <textarea name="about" style="height: 7.5rem; line-height:1.2">${userFound.about}</textarea>
-                        </label>
+                        Friend of: </br>
+                                    <c:forEach items="${friendsOfFriend}" var="friends">
+                            <tr>
+                                    <c:choose>
+
+                                         <c:when test="${(friends.getUserId()) eq (user.getUserId())}">
+                                          <a class="button" style="background-color:#0000F9" href="${pageContext.request.contextPath}/user/${friends.getUserId()}">${friends.getUsername()}</a>
+                                         </c:when>
+                                           <c:when test="${  friendsOfUserInSession.contains(friends) eq true}">
+                                           <a class="button" style="background-color:#3FB8AF" href="${pageContext.request.contextPath}/user/${friends.getUserId()}">${friends.getUsername()}</a>
+                                           </c:when>
+                                         <c:otherwise>
+                                         <a class="button" style="background-color:#8B91A0" href="${pageContext.request.contextPath}/user/${friends.getUserId()}">${friends.getUsername()}</a>
+                                         </c:otherwise>
+                                     </c:choose>
+                            </tr>
+
+                        </c:forEach>
 
                     </div>
 
