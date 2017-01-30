@@ -1,6 +1,7 @@
 package lv.javaguru.java2.servlet;
 
 import lv.javaguru.java2.domain.User;
+import lv.javaguru.java2.service.MainService;
 import lv.javaguru.java2.service.UserService;
 import lv.javaguru.java2.service.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(urlPatterns = { "/user/*" })
 public class UserServlet extends HttpServlet {
@@ -28,6 +30,8 @@ public class UserServlet extends HttpServlet {
     private UserService userService;
     @Autowired
     private Utils utils;
+    @Autowired
+    private MainService mainService;
 
     public void init(ServletConfig config) throws ServletException{
         super.init(config);
@@ -65,6 +69,22 @@ public class UserServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
             return;
         }
+
+        // get list of : friends of a friend
+        // and friends of  user in session   to compare them
+
+      //  MainService friendsOfUserInSessionObj = new MainService ();
+        List <User> friendsOfUserInSession = mainService.getFriends(userInSession.getUserId());
+
+      //  MainService friendsOfAFriendObj = new MainService ();
+        List<User>  friendsOfFriend = mainService.getFriends(Long.parseLong(userID));
+
+
+
+        request.setAttribute("friendsOfUserInSession",friendsOfUserInSession);
+        request.setAttribute("friendsOfFriend",friendsOfFriend);
+
+        request.setAttribute("userService", userService);
 
 
         User user = userService.getUserById(userID);
